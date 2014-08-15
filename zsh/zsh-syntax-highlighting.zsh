@@ -1,0 +1,1 @@
+zsh-syntax-highlighting.ignore/zsh-syntax-highlighting.plugin.zsh

@@ -1,82 +1,97 @@
 autoload colors && colors
-# cheers, @ehrenmurdick
-# http://github.com/ehrenmurdick/config/blob/master/zsh/prompt.zsh
 
-if (( $+commands[git] ))
-then
+#############################
+# GIT-RELATED FUNCTIONS
+#############################
+
+if (( $+commands[git] )); then
   git="$commands[git]"
 else
   git="/usr/bin/git"
 fi
 
-git_branch() {
-  echo $($git symbolic-ref HEAD 2>/dev/null | awk -F/ {'print $NF'})
+function in_git_repo() {
+  $git status -s &> /dev/null
 }
 
-git_dirty() {
-  if $(! $git status -s &> /dev/null)
-  then
-    echo ""
+function git_dirty() {
+  in_git_repo || return
+  if [[ $POST_1_7_2_GIT -gt 0 ]]; then
+    SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+  fi
+  if [[ $($git status ${SUBMODULE_SYNTAX} --porcelain -uno) == "" ]]; then
+    echo " on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
   else
-    if [[ $($git status --porcelain) == "" ]]
-    then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
-    else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
+    echo " on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
+  fi
+}
+
+function git_prompt_info() {
+  ref=$($git symbolic-ref HEAD 2>/dev/null) || return
+  echo "${ref#refs/heads/}"
+}
+
+function untracked_status() {
+  no_untracked || echo "%{$fg[yellow]%}?%{$reset_color%}"
+}
+
+function no_untracked() {
+  in_git_repo || return 0
+  return $($git ls-files --other --directory --exclude-standard | sed q | wc -l)
+}
+
+# compare the provided version of git to the version installed and on path
+# prints 1 if input version <= installed version
+# prints -1 otherwise
+function git_compare_version() {
+  local INPUT_GIT_VERSION=$1;
+  local INSTALLED_GIT_VERSION
+  INPUT_GIT_VERSION=(${(s/./)INPUT_GIT_VERSION});
+  INSTALLED_GIT_VERSION=($(command git --version 2>/dev/null));
+  INSTALLED_GIT_VERSION=(${(s/./)INSTALLED_GIT_VERSION[3]});
+
+  for i in {1..3}; do
+    if [[ $INSTALLED_GIT_VERSION[$i] -lt $INPUT_GIT_VERSION[$i] ]]; then
+      echo -1
+      return 0
     fi
+  done
+  echo 1
+}
+
+# this is unlikely to change so make it all statically assigned
+POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+# clean up the namespace slightly by removing the checker function
+unset -f git_compare_version
+
+#############################
+# NORMAL PROMPT FUNCTIONS
+#############################
+
+function prompt_context() {
+  local user=`whoami`
+
+  if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
+    echo "%{$fg[magenta]%}%n%{$reset_color%}@%{$fg[yellow]%}%m%{$reset_color%}:"
   fi
 }
 
-git_prompt_info () {
- ref=$($git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
+local cur_dir="%{$fg_bold[blue]%}%~%{$reset_color%}"
+
+function prompt_char() {
+  if [ $UID -eq 0 ]; then echo "%{$fg[red]%}#%{$reset_color%}"; else echo $; fi
 }
 
-unpushed () {
-  $git cherry -v @{upstream} 2>/dev/null
+local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%}) "
+
+function virtualenv_info() {
+  [ $VIRTUAL_ENV ] && echo "%{$fg[cyan]%}("`basename $VIRTUAL_ENV`")%{$reset_color%} "
 }
 
-need_push () {
-  if [[ $(unpushed) == "" ]]
-  then
-    echo " "
-  else
-    echo " with %{$fg_bold[magenta]%}unpushed%{$reset_color%} "
-  fi
-}
+local time_str="%{$fg[green]%}[%*]%{$reset_color%}"
 
-ruby_version() {
-  if (( $+commands[rbenv] ))
-  then
-    echo "$(rbenv version | awk '{print $1}')"
-  fi
-
-  if (( $+commands[rvm-prompt] ))
-  then
-    echo "$(rvm-prompt | awk '{print $1}')"
-  fi
-}
-
-rb_prompt() {
-  if ! [[ -z "$(ruby_version)" ]]
-  then
-    echo "%{$fg_bold[yellow]%}$(ruby_version)%{$reset_color%} "
-  else
-    echo ""
-  fi
-}
-
-directory_name() {
-  echo "%{$fg_bold[cyan]%}%1/%\/%{$reset_color%}"
-}
-
-export PROMPT=$'\n$(rb_prompt)in $(directory_name) $(git_dirty)$(need_push)\n› '
-set_prompt () {
-  export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
-}
-
-precmd() {
-  title "zsh" "%m" "%55<...<%~"
-  set_prompt
-}
+PROMPT='
+$(prompt_context)${cur_dir}$(git_dirty)$(untracked_status)
+ $(prompt_char) '
+PROMPT2='%{$fg[red]%}   %_%{$reset_color%}> '
+RPROMPT='${return_code}$(virtualenv_info)${time_str}'
