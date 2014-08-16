@@ -1,5 +1,5 @@
 # shortcut to this dotfiles path is $ZSH
-export ZSH=$HOME/dotfiles
+export ZSH=$HOME/.dotfiles
 
 # use .localrc for SUPER SECRET CRAP that you don't
 # want in your public, versioned repo.
@@ -13,7 +13,7 @@ typeset -U config_files
 config_files=($ZSH/**/*.zsh)
 
 # ignore any that have .ignore in their path
-config_files=(${config_files:#*.ignore*})
+config_files=(${config_files:#*.ignore/*})
 
 # load the path files
 for file in ${(M)config_files:#*/path.zsh}

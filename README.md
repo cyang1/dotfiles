@@ -1,27 +1,23 @@
-# holman does dotfiles
+# cyang1 does dotfiles
 
 ## dotfiles
 
 Your dotfiles are how you personalize your system. These are mine.
 
-I was a little tired of having long alias files and everything strewn about
-(which is extremely common on other dotfiles projects, too). That led to this
-project being much more topic-centric. I realized I could split a lot of things
-up into the main areas I used (Ruby, git, system libraries, and so on), so I
-structured the project accordingly.
-
-If you're interested in the philosophy behind why projects like these are
-awesome, you might want to [read my post on the
-subject](http://zachholman.com/2010/08/dotfiles-are-meant-to-be-forked/).
+These are dotfiles forked from [Zach Holman](http://github.com/holman) and
+modified to suit my needs. There have been a couple bug fixes and additional
+features, along with many personal customizations. Most of the text in this
+README is from [Holman's original README](http://github.com/holman/dotfiles).
 
 ## install
 
 Run this:
 
 ```sh
-git clone https://github.com/holman/dotfiles.git ~/.dotfiles
+git clone https://github.com/cyang1/dotfiles.git ~/.dotfiles
 cd ~/.dotfiles
 script/bootstrap
+script/install
 ```
 
 This will symlink the appropriate files in `.dotfiles` to your home directory.
@@ -39,15 +35,18 @@ this script in `bin/`.
 
 Everything's built around topic areas. If you're adding a new area to your
 forked dotfiles — say, "Java" — you can simply add a `java` directory and put
-files in there. Anything with an extension of `.zsh` will get automatically
-included into your shell. Anything with an extension of `.symlink` will get
-symlinked without extension into `$HOME` when you run `script/bootstrap`.
+files in there.
+
+Anything with an extension of `.zsh` will get automatically included into your
+shell if it does not have `.ignore` anywhere in its path. Anything with an
+extension of `.symlink` will get symlinked without extension into `$HOME` and
+prefixed with a `.` when you run `script/bootstrap`.
 
 ## what's inside
 
 A lot of stuff. Seriously, a lot of stuff. Check them out in the file browser
 above and see what components may mesh up with you.
-[Fork it](https://github.com/holman/dotfiles/fork), remove what you don't
+[Fork it](https://github.com/cyang1/dotfiles/fork), remove what you don't
 use, and build on what you do use.
 
 ## components
@@ -56,8 +55,12 @@ There's a few special files in the hierarchy.
 
 - **bin/**: Anything in `bin/` will get added to your `$PATH` and be made
   available everywhere.
+- **topic/\*.ignore/\***: Any files ending in `.zsh` that are children if a
+  directory suffixed with `.ignore` will be ignored.
 - **topic/\*.zsh**: Any files ending in `.zsh` get loaded into your
   environment.
+- **topic/install.sh**: Any file named `install.sh` is run when
+  `./script/install` is called.
 - **topic/path.zsh**: Any file named `path.zsh` is loaded first and is
   expected to setup `$PATH` or similar.
 - **topic/completion.zsh**: Any file named `completion.zsh` is loaded
@@ -75,7 +78,7 @@ said, I do use this as *my* dotfiles, so there's a good chance I may break
 something if I forget to make a check for a dependency.
 
 If you're brand-new to the project and run into any blockers, please
-[open an issue](https://github.com/holman/dotfiles/issues) on this repository
+[open an issue](https://github.com/cyang1/dotfiles/issues) on this repository
 and I'd love to get it fixed for you!
 
 ## thanks

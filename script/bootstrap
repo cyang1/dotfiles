@@ -124,6 +124,18 @@ link_file () {
   fi
 }
 
+setup_submodules () {
+  info "setting up submodules"
+  local ret = git submodule init > /tmp/dotfiles-submodule 2>&1 && \
+    git submodule update >> /tmp/dotfiles-submodule 2>&1
+  if $ret
+  then
+    success "submodules downloaded"
+  else
+    fail "error downloading submodules"
+  fi
+}
+
 install_dotfiles () {
   info 'installing dotfiles'
 
@@ -137,8 +149,7 @@ install_dotfiles () {
 }
 
 setup_gitconfig
-git submodule init
-git submodule update
+setup_submodules
 install_dotfiles
 
 # If we're on a Mac, let's install and setup homebrew.
