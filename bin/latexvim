@@ -1,0 +1,3 @@
+#!/bin/sh
+# Version comes from specific version checked out in homebrew/install.sh
+exec $(brew --cellar vim)/7.4.253/bin/vim --servername latexvim "$@"

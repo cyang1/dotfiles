@@ -24,12 +24,18 @@ set smartcase     " Make search pattern case sensitive iff starts with capital
 set magic         " Turn regular expressions on in searching
 set hidden        " Hide buffer when abandoned
 set nowrap        " Turn off text wrapping
-set clipboard=unnamed " Uses system clipboard as clipboard
 set mouse=a       " Enable mouse support
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc " Ignore certain files, esp for CtrlP
 set hlsearch      " Turn on search highlighting
 if has('mouse_sgr')
     set ttymouse=sgr " Allows clicking past a certain column in VIM
+endif
+if has('clipboard')
+    set clipboard=unnamed " Uses system clipboard as clipboard
+
+    if has("unnamedplus") " X11 support
+        set clipboard+=unnamedplus
+    endif
 endif
 
 " Setup colorscheme
@@ -46,7 +52,6 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'gmarik/vundle'
 
-" The following are examples of different formats supported.
 " Keep bundle commands between here and filetype plugin indent on.
 " scripts on GitHub repos
 Plugin 'tpope/vim-fugitive'
@@ -54,6 +59,7 @@ Plugin 'bling/vim-airline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
 
 call vundle#end()
 filetype plugin indent on
@@ -72,6 +78,12 @@ set t_Co=256
 set fillchars+=vert:\│,stl:\ ,stlnc:\
 set term=xterm-256color
 set termencoding=utf-8
+
+" LaTeX-Box settings
+let g:LatexBox_latexmk_async = 1                 " Need this on so the quickfix automatically appears on error
+let g:LatexBox_latexmk_preview_continuously = 1  " Runs latexmk with -pvc so it watches the .tex file
+let g:LatexBox_quickfix = 2                      " Opens a quickfix window with errors but does not draw focus
+let g:LatexBox_viewer = 'open -a skim'
 
 augroup vimrcEx
   autocmd!
@@ -96,6 +108,12 @@ augroup vimrcEx
 
   " Automatically wrap at 80 characters for Markdown
   autocmd BufRead,BufNewFile *.md setlocal textwidth=80
+
+  " Set nice text editing for latex
+  autocmd BufRead,BufNewFile *.tex set filetype=tex
+  autocmd BufRead,BufNewFile *.tex setlocal textwidth=80
+  autocmd BufRead,BufNewFile *.tex set wrap
+  autocmd FileType tex setlocal spell
 augroup END
 
 " Softtabs, 4 spaces, make tabs automatically go to right place instead of fixed width
@@ -124,6 +142,11 @@ set numberwidth=5
 " Snippets are activated by Shift+Tab
 let g:snippetsEmu_key = "<S-Tab>"
 
+" Better Silent that doesn't leave the screen blank
+command! -nargs=1 Silent
+    \ | execute ':silent '.<q-args>
+    \ | execute ':redraw!'
+
 " Tab completion
 " will insert tab at beginning of line,
 " will use completion if not at beginning
@@ -147,8 +170,6 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 
 " Buffer navigation
 nnoremap <leader>c  :bp\|bd #<CR>
-nnoremap <leader>l  :bnext<CR>
-nnoremap <leader>h  :bprevious<CR>
 
 " Swap ; and :  Convenient.
 nnoremap ; :
@@ -171,7 +192,13 @@ nnoremap <C-l> <C-w>l
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 
 " Press return to get out of highlighting
-:nnoremap <CR> :nohlsearch<CR><CR>
+nnoremap <CR> :nohlsearch<CR><CR>
 
 " Make # indent correctly under smart indenting
-:inoremap # X#
+inoremap # X#
+
+" LaTeX bindings
+" Forward search
+nnoremap <silent> <leader>lv :Silent
+    \ !/Applications/Skim.app/Contents/SharedSupport/displayline
+    \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>" "%:p"<CR>
