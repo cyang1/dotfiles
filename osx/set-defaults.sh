@@ -20,8 +20,8 @@ chflags nohidden ~/Library
 # General UI/UX
 ###############################################################################
 
-# Set standby delay to 3 hours (default is 1 hour)
-sudo pmset -a standbydelay 10800
+# Set deep-sleep delay to 12 hours (default is 1hr 10min)
+sudo pmset -a standbydelay 43200
 
 # Disable the sound effects on boot
 sudo nvram SystemAudioVolume=" "
@@ -57,11 +57,14 @@ defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 # in the login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
+# Hide the spotlight icon
+sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
+
 # Restart automatically if the computer freezes
 sudo systemsetup -setrestartfreeze on
 
 # Never go into computer sleep mode because of idling
-sudo systemsetup -setcomputersleep Off > /dev/null
+sudo systemsetup -setcomputersleep Off
 
 # Check for software updates daily, not just once per week
 defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
@@ -72,6 +75,7 @@ defaults write com.apple.SoftwareUpdate ScheduleFrequency -int 1
 
 # Disable hibernation (speeds up entering sleep mode)
 sudo pmset -a hibernatemode 0
+sudo pmset -a autopoweroff 0
 
 # Remove the sleep image file to save disk space
 sudo rm -f /Private/var/vm/sleepimage
@@ -80,15 +84,9 @@ sudo touch /Private/var/vm/sleepimage
 # …and make sure it can’t be rewritten
 sudo chflags uchg /Private/var/vm/sleepimage
 
-# Disable the sudden motion sensor as it’s not useful for SSDs
-sudo pmset -a sms 0
-
 ###############################################################################
 # Apple software: Safari, Updater, iTunes, etc.
 ###############################################################################
-
-# Hide Safari's bookmark bar.
-defaults write com.apple.Safari ShowFavoritesBar -bool false
 
 # Set up Safari for development.
 defaults write com.apple.Safari IncludeInternalDebugMenu -bool true
@@ -106,6 +104,9 @@ defaults write com.apple.LaunchServices LSQuarantine -bool false
 ###############################################################################
 # Interfaces: trackpad, mouse, keyboard, bluetooth, etc.
 ###############################################################################
+
+# Increasing sound quality for Bluetooth headphones/headsets
+defaults write com.apple.BluetoothAudioAgent "Apple Bitpool Min (editable)" -int 40
 
 # Set a really fast key repeat.
 defaults write NSGlobalDomain KeyRepeat -int 0
@@ -128,10 +129,8 @@ defaults write NSGlobalDomain AppleKeyboardUIMode -int 3
 # Disable auto-correct
 defaults write NSGlobalDomain NSAutomaticSpellingCorrectionEnabled -bool false
 
-# Disable smart quotes as they're annoying when typing code
+# Disable smart quotes and smart dashes as they're annoying when typing code
 defaults write NSGlobalDomain NSAutomaticQuoteSubstitutionEnabled -bool false
-
-# Disable smart dashes as they're annoying when typing code
 defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
 ###############################################################################
@@ -155,14 +154,6 @@ defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 defaults write com.apple.dock wvous-bl-corner -int 7
 defaults write com.apple.dock wvous-bl-modifier -int 0
 
-# Bottom right screen corner → Start screen saver
-defaults write com.apple.dock wvous-br-corner -int 5
-defaults write com.apple.dock wvous-br-modifier -int 0
-
-# Top right screen corner → Desktop
-defaults write com.apple.dock wvous-tr-corner -int 4
-defaults write com.apple.dock wvous-tr-modifier -int 0
-
 # Require password immediately after sleep or screen saver.
 defaults write com.apple.screensaver askForPassword -int 1
 defaults write com.apple.screensaver askForPasswordDelay -int 0
@@ -184,8 +175,8 @@ defaults write com.apple.finder ShowExternalHardDrivesOnDesktop -bool true
 defaults write com.apple.finder ShowMountedServersOnDesktop -bool true
 defaults write com.apple.finder ShowRemovableMediaOnDesktop -bool true
 
-# Always open everything in Finder's list view. This is important.
-defaults write com.apple.Finder FXPreferredViewStyle -string "Nlsv"
+# Always open everything in Finder's column view. (Clmv - Column, Nlsv - List)
+defaults write com.apple.Finder FXPreferredViewStyle -string "Clmv"
 
 # Show file extensions by default
 defaults write NSGlobalDomain AppleShowAllExtensions -bool true
@@ -229,6 +220,9 @@ defaults write com.apple.finder FXInfoPanesExpanded -dict \
 # Dock
 ###############################################################################
 
+# Wipe all sticky app icons from the Dock
+defaults write com.apple.dock persistent-apps -array
+
 # Show indicator lights for open applications in the Dock
 defaults write com.apple.dock show-process-indicators -bool true
 
@@ -243,6 +237,10 @@ defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
+
+# Make the dock icons pretty big, and at the right size so that full-screening
+# iTerm2 won't leave extra space on the built-in display
+defaults write com.apple.dock tilesize -int 61
 
 ###############################################################################
 # Time Machine                                                                #

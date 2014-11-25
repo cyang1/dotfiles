@@ -6,11 +6,16 @@ tap caskroom/versions
 
 cask install caffeine 2> /dev/null
 cask install flux 2> /dev/null
+cask install gfxcardstatus 2> /dev/null
 cask install google-chrome 2> /dev/null
 cask install iterm2 2> /dev/null
 cask install karabiner 2> /dev/null
 cask install mactex 2> /dev/null
+cask install mailbox 2> /dev/null
 cask install seil 2> /dev/null
+cask install skim 2> /dev/null
+cask install slate 2> /dev/null
+cask install smoothmouse 2> /dev/null
 cask install the-unarchiver 2> /dev/null
 cask install transmission 2> /dev/null
 cask install vlc 2> /dev/null

@@ -41,24 +41,6 @@ then
     brew link vim
   fi
 
-  if [ -z "$(brew ls --versions ntfs-3g)" ]
-  then
-    # Setup reading NTFS drives, also installs osxfuse
-    brew install ntfs-3g
-
-    # Don't let this update automatically because there are some
-    # manual steps required
-    brew pin ntfs-3g
-
-    # Replace mount_ntfs with a version that allows writing to NTFS
-    sudo mv /sbin/mount_ntfs /sbin/mount_ntfs.orig
-    sudo ln -s /usr/local/Cellar/ntfs-3g/*/sbin/mount_ntfs /sbin/mount_ntfs
-
-    # Install osxfuse file system bundle
-    sudo /bin/cp -RfX /usr/local/Cellar/osxfuse/*/Library/Filesystems/osxfusefs.fs /Library/Filesystems
-    sudo chmod +s /Library/Filesystems/osxfusefs.fs/Support/load_osxfusefs
-  fi
-
   git rev-parse HEAD > "$VERSION_FILE"
 fi
 
