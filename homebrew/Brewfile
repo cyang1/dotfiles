@@ -2,7 +2,6 @@
 # Usage: `brew bundle Brewfile`
 
 # Install GNU core utilities (those that come with OS X are outdated)
-# Don’t forget to add `$(brew --prefix coreutils)/libexec/gnubin` to `$PATH`.
 install coreutils
 # Install some other useful utilities like `sponge`
 install moreutils
@@ -19,6 +18,7 @@ install git
 install vim --override-system-vi
 install homebrew/dupes/grep
 install homebrew/dupes/screen
+install zsh
 
 # Install other useful binaries
 install aria2
