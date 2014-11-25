@@ -57,9 +57,6 @@ defaults write NSGlobalDomain NSTextShowsControlCharacters -bool true
 # in the login window
 sudo defaults write /Library/Preferences/com.apple.loginwindow AdminHostInfo HostName
 
-# Hide the spotlight icon
-sudo chmod 600 /System/Library/CoreServices/Search.bundle/Contents/MacOS/Search
-
 # Restart automatically if the computer freezes
 sudo systemsetup -setrestartfreeze on
 
