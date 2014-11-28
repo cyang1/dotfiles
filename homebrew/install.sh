@@ -19,7 +19,7 @@ else
   brew upgrade
 fi
 
-grep -Fxq $(git rev-parse HEAD) "$VERSION_FILE" 2> /dev/null
+( cd $ZSH && grep -Fxq $(git rev-parse HEAD) "$VERSION_FILE" 2> /dev/null )
 if [ $? -ne 0 ]
 then
   # Install homebrew packages
@@ -41,7 +41,5 @@ then
     brew link vim
   fi
 
-  git rev-parse HEAD > "$VERSION_FILE"
+  ( cd $ZSH && git rev-parse HEAD > "$VERSION_FILE" )
 fi
-
-exit 0
