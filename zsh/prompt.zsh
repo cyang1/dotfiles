@@ -72,7 +72,7 @@ function prompt_context() {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    echo "%{$fg[magenta]%}%n%{$reset_color%} at %{$fg[yellow]%}%m%{$reset_color%} in "
+    echo "%{$fg_bold[white]%}%n%{$reset_color%} at %{$fg_bold[black]%}%m%{$reset_color%} in "
   fi
 }
 

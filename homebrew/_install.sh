@@ -9,14 +9,14 @@ export ZSH=$HOME/.dotfiles
 export VERSION_FILE=$ZSH/.dotfiles-version
 
 # Check for Homebrew
-if test ! $(which brew)
+if command -v brew >/dev/null 2>&1
 then
+  brew update
+  brew upgrade
+else
   echo "  Installing Homebrew for you."
   ruby -e "$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)" > /tmp/homebrew-install.log
   brew doctor
-else
-  brew update
-  brew upgrade
 fi
 
 ( cd $ZSH && grep -Fxq $(git rev-parse HEAD) "$VERSION_FILE" 2> /dev/null )
