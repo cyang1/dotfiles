@@ -23,23 +23,7 @@ fi
 if [ $? -ne 0 ]
 then
   # Install homebrew packages
-  brew bundle $ZSH/homebrew/Brewfile
-
-  # Now, checkout an older version of Vim (7.4.253) to build with client server
-  # since only LaTeX really needs it and I don't want to run X11 all the time
-  if [ ! -e "$(brew --cellar vim)/7.4.253" ]
-  then
-    # First, unlink normal vim
-    brew unlink vim
-
-    ( cd $(brew --prefix) && \
-      git checkout 0541807 $(brew --prefix)/Library/Formula/vim.rb && \
-      { brew install vim --with-client-server && brew unlink vim; \
-        git checkout HEAD $(brew --prefix)/Library/Formula/vim.rb; } )
-
-    # Now relink normal vim
-    brew link vim
-  fi
+  . $ZSH/homebrew/Brewfile.sh
 
   ( cd $ZSH && git rev-parse HEAD > "$VERSION_FILE" )
 fi
