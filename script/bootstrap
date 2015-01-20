@@ -126,9 +126,9 @@ link_file () {
 
 setup_submodules () {
   info "setting up submodules"
-  local ret=git submodule init > /tmp/dotfiles-submodule 2>&1 && \
+  git submodule init > /tmp/dotfiles-submodule 2>&1 && \
     git submodule update >> /tmp/dotfiles-submodule 2>&1
-  if $ret
+  if [ $? -eq 0 ]
   then
     success "submodules downloaded"
   else

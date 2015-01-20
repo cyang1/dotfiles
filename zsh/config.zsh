@@ -4,8 +4,15 @@ else
   export PS1='%3~$(git_info_for_prompt)%# '
 fi
 
+# For OpenBSD/OS X `ls`
 export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
+
+# `ls` colors for the rest of us
+eval $(dircolors -b $ZSH/zsh/dircolors.trapd00r)
+
+# Pretty colors during tab completion
+zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
 
 fpath=($ZSH/functions $fpath)
 

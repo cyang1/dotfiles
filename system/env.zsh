@@ -1,5 +1,5 @@
 export TERM='xterm-256color'
-export EDITOR='vi'
+export EDITOR='vim'
 export PAGER='less'
 export LESS='-WR'
 export LC_CTYPE=$LANG
