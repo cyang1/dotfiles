@@ -189,6 +189,10 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" Quicker buffer movement
+nnoremap <S-h> :bp<CR>
+nnoremap <S-l> :bn<CR>
+
 " Map <Leader>p to paste with no auto-indent
 map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 
