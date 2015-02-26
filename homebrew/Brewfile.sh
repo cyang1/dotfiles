@@ -14,6 +14,7 @@ brew install wget --enable-iri
 
 # Install more recent versions of some OS X tools
 brew install git
+brew install python # Must go before vim
 brew install vim --override-system-vi
 brew install homebrew/dupes/grep
 brew install homebrew/dupes/screen

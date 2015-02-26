@@ -61,6 +61,7 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'Valloric/YouCompleteMe'
 
 call vundle#end()
 filetype plugin indent on
@@ -85,6 +86,9 @@ let g:LatexBox_latexmk_async = 1                 " Need this on so the quickfix 
 let g:LatexBox_latexmk_preview_continuously = 1  " Runs latexmk with -pvc so it watches the .tex file
 let g:LatexBox_quickfix = 2                      " Opens a quickfix window with errors but does not draw focus
 let g:LatexBox_viewer = 'open -a skim'
+
+" YouCompleteMe settings
+let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
 
 augroup vimrcEx
   autocmd!
