@@ -62,6 +62,7 @@ Plugin 'airblade/vim-gitgutter'
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'Valloric/YouCompleteMe'
+Plugin 'Valloric/ListToggle'
 
 call vundle#end()
 filetype plugin indent on
@@ -89,6 +90,7 @@ let g:LatexBox_viewer = 'open -a skim'
 
 " YouCompleteMe settings
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
+let g:ycm_always_populate_location_list = 1 " We don't use the location list for anything else
 
 augroup vimrcEx
   autocmd!
@@ -211,8 +213,5 @@ nnoremap <CR> :nohlsearch<CR><CR>
 " Make # indent correctly under smart indenting
 inoremap # X#
 
-" LaTeX bindings
-" Forward search
-nnoremap <silent> <leader>lv :Silent
-    \ !/Applications/Skim.app/Contents/SharedSupport/displayline
-    \ <C-R>=line('.')<CR> "<C-R>=LatexBox_GetOutputFile()<CR>" "%:p"<CR>
+" YouCompleteMe bindings
+nnoremap <leader>jd :YcmCompleter GoTo<CR>
