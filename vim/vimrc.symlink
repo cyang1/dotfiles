@@ -193,6 +193,11 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
+" Use Ctrl+F to easily search for a word in the project
+nnoremap <C-f> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+nnoremap <Leader>k :cp<CR>
+nnoremap <Leader>j :cn<CR>
+
 " Quicker buffer movement
 nnoremap <S-h> :bp<CR>
 nnoremap <S-l> :bn<CR>
