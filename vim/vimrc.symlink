@@ -50,7 +50,7 @@ set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
 " let Vundle manage Vundle, required
-Plugin 'gmarik/vundle'
+Plugin 'gmarik/Vundle.vim'
 
 " Keep bundle commands between here and filetype plugin indent on.
 " scripts on GitHub repos
@@ -63,6 +63,8 @@ Plugin 'LaTeX-Box-Team/LaTeX-Box'
 Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Valloric/ListToggle'
+Plugin 'wavded/vim-stylus'
+Plugin 'digitaltoad/vim-jade'
 
 call vundle#end()
 filetype plugin indent on
