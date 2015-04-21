@@ -84,6 +84,9 @@ set fillchars+=vert:\│,stl:\ ,stlnc:\
 set term=xterm-256color
 set termencoding=utf-8
 
+" NERDTree settings
+let g:NERDTreeIgnore = ['\.pyc$', '\.o$', '\.dep$']
+
 " LaTeX-Box settings
 let g:LatexBox_latexmk_async = 1                 " Need this on so the quickfix automatically appears on error
 let g:LatexBox_latexmk_preview_continuously = 1  " Runs latexmk with -pvc so it watches the .tex file
