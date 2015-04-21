@@ -1,3 +1,8 @@
+# Locally recorded commit hash last time `dot` was run.
 .dotfiles-version
 
+# Custom git configuration for this user.
 git/gitconfig.symlink
+
+# General files to ignore.
+*.pyc
