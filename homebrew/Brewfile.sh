@@ -22,6 +22,7 @@ brew install zsh
 
 # Install other useful binaries
 brew install aria2
+brew install cmake
 brew install grc
 brew install htop-osx
 brew install hub
