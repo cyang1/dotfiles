@@ -69,6 +69,9 @@ Plugin 'digitaltoad/vim-jade'
 call vundle#end()
 filetype plugin indent on
 
+" Treat <li> and <p> tags like the block tags they are
+let g:html_indent_tags = 'li\|p'
+
 " Airline settings
 let g:airline_powerline_fonts = 1
 let g:airline#extensions#tabline#enabled = 1
@@ -135,7 +138,6 @@ set smarttab
 set expandtab
 
 set ai "Auto indent
-set si "Smart indent
 
 " Display extra whitespace
 set list listchars=tab:»·,trail:·
@@ -147,7 +149,7 @@ else
     2mat ErrorMsg '\%81v.'
 endif
 
-" Numbers
+" Line numbers
 set number
 set numberwidth=5
 
@@ -174,6 +176,21 @@ function! InsertTabWrapper()
 endfunction
 inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 
+" The Silver Searcher
+if executable('ag')
+  " Use ag over grep
+  set grepprg=ag\ --nogroup\ --nocolor
+
+  " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
+  let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+
+  " ag is fast enough that CtrlP doesn't need to cache
+  let g:ctrlp_use_caching = 0
+
+  " :Ag command
+  command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+endif
+
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
@@ -187,9 +204,6 @@ nnoremap <leader>c  :bp\|bd #<CR>
 nnoremap ; :
 nnoremap : ;
 
-" Treat <li> and <p> tags like the block tags they are
-let g:html_indent_tags = 'li\|p'
-
 " Open new split panes to right and bottom, which feels more natural
 set splitbelow
 set splitright
@@ -200,8 +214,9 @@ nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" Use Ctrl+F to easily search for a word in the project
-nnoremap <C-f> :execute "vimgrep /" . expand("<cword>") . "/j **" <Bar> cw<CR>
+" Use K to easily search for a word in the project
+nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
+vnoremap K y:grep! "\b<C-R>"\b"<CR>:cw<CR>
 nnoremap <Leader>k :cp<CR>
 nnoremap <Leader>j :cn<CR>
 
@@ -210,13 +225,10 @@ nnoremap <S-h> :bp<CR>
 nnoremap <S-l> :bn<CR>
 
 " Map <Leader>p to paste with no auto-indent
-map <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+nnoremap <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 
 " Press return to get out of highlighting
 nnoremap <CR> :nohlsearch<CR><CR>
-
-" Make # indent correctly under smart indenting
-inoremap # X#
 
 " YouCompleteMe bindings
 nnoremap <leader>jd :YcmCompleter GoTo<CR>
