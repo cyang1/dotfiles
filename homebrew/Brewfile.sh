@@ -21,7 +21,6 @@ brew install homebrew/dupes/screen
 brew install zsh
 
 # Install other useful binaries
-brew install ack
 brew install aria2
 brew install cmake
 brew install grc
