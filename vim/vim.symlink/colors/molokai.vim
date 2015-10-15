@@ -140,10 +140,16 @@ if &t_Co > 255
       hi Normal                   ctermbg=234
       hi CursorLine               ctermbg=235   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
+
+      hi IndentGuidesOdd          ctermbg=234
+      hi IndentGuidesEven         ctermbg=235
    else
       hi Normal       ctermfg=252 ctermbg=233
       hi CursorLine               ctermbg=234   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
+
+      hi IndentGuidesOdd          ctermbg=233
+      hi IndentGuidesEven         ctermbg=234
    endif
    hi Boolean         ctermfg=135
    hi Character       ctermfg=144
@@ -233,6 +239,9 @@ if &t_Co > 255
 
    hi SpecialKey      ctermfg=59
 
+   hi SyntasticErrorSign    ctermfg=161 ctermbg=235   cterm=bold
+   hi SyntasticWarningSign  ctermfg=208 ctermbg=235   cterm=bold
+
    if exists("g:rehash256") && g:rehash256 == 1
        hi Normal       ctermfg=252 ctermbg=234
        hi CursorLine               ctermbg=236   cterm=none
@@ -269,5 +278,8 @@ if &t_Co > 255
        hi LineNr          ctermfg=239 ctermbg=235
        hi NonText         ctermfg=239
        hi SpecialKey      ctermfg=239
+
+       hi IndentGuidesOdd          ctermbg=234
+       hi IndentGuidesEven         ctermbg=236
    endif
 end

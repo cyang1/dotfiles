@@ -1,42 +1,81 @@
-" Make the background behave better in tmux
-set term=screen-256color
+set nocompatible                " Use Vim settings, rather then Vi settings.  This overrides settings, so do it first!
 
-" Leader
-let mapleader = " "
+" Terminal-related settings.
+let &termencoding=&encoding
+set encoding=utf-8
+set guifont=Meslo\ LG\ S\ DZ\ for\ Powerline:h14
+set fillchars+=vert:\│,stl:\ ,stlnc:\
+set lazyredraw                  " Don't redraw while executing macros (good performance config).
+set visualbell                  " Use visual bell instead of beeping.
+set sessionoptions-=options
 
-set backspace=2   " Backspace deletes like most programs in insert mode
-set nocompatible  " Use Vim settings, rather then Vi settings
-set nobackup
-set nowritebackup
-set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
-set history=50
-set ruler         " show the cursor position all the time
-set cursorline    " turn on highlighting of the current line
-set showcmd       " display incomplete commands
-set incsearch     " do incremental searching
-set laststatus=2  " Always display the status line
-set noshowmode    " Hide the default mode text (e.g. -- INSERT -- below the statusline
-set autowrite     " Automatically :write before running commands
-set lazyredraw    " Don't redraw while executing macros (good performance config)
-set ttimeoutlen=50 "Make leaving insert mode faster
-set ignorecase    " Ignore case when searching
-set smartcase     " Make search pattern case sensitive iff starts with capital
-set magic         " Turn regular expressions on in searching
-set hidden        " Hide buffer when abandoned
-set nowrap        " Turn off text wrapping
-set mouse=a       " Enable mouse support
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc " Ignore certain files, esp for CtrlP
-set hlsearch      " Turn on search highlighting
-if has('mouse_sgr')
-    set ttymouse=sgr " Allows clicking past a certain column in VIM
+" Input settings.
+set nowrap                      " Don't visually wrap long lines.
+set backspace=indent,eol,start  " Backspace deletes like most programs in insert mode.
+set scrolloff=5                 " Minimal number of screen lines to keep above and below the cursor.
+set ttimeoutlen=50              " Make leaving insert mode faster.
+set textwidth=79
+if exists('&colorcolumn')
+    set colorcolumn=80
+else
+    2mat ErrorMsg '\%80v.'
 endif
-if has('clipboard')
-    set clipboard=unnamed " Uses system clipboard as clipboard
 
-    if has("unnamedplus") " X11 support
+" Miscellaneous display settings.
+set hidden                      " Hide buffer when abandoned.
+set splitbelow splitright       " Open new split panes to right and bottom, which feels more natural.
+set list listchars=tab:»·,trail:· " Display extra whitespace and tabs.
+
+" Ignore certain files, esp. for Ctrl-P.
+set wildignore+=*/tmp/*,*.swp   " Useless temp files.
+set wildignore+=*.zip           " Editing archives doesn't make much sense.
+set wildignore+=*.so            " Ignore compiled C/C++ files.
+set wildignore+=*.pyc,*.pyo     " Ignore compiled Python files.
+
+" Swap file settings.
+set nowritebackup
+set noswapfile                  " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
+
+" On-screen settings.
+set ruler                       " Show the cursor position all the time.  Does nothing in vim-airline.
+set laststatus=2                " Always display the status line.  Necessary for vim-airline.
+set noshowmode                  " Don't show the -- INSERT -- style text, vim-airline takes care of that.
+set number numberwidth=5        " Line numbers.
+set cursorline                  " Turn on highlighting of the current line.
+
+" Search settings.
+set incsearch                   " Show where the current search pattern matches while it is being typed.
+set ignorecase                  " Ignore case when searching.
+set smartcase                   " Make search pattern case sensitive iff starts with capital.
+set hlsearch                    " Turn on search highlighting.
+
+" Mouse settings.
+set mouse=a                     " Enable mouse support.
+if has('mouse_sgr')
+    set ttymouse=sgr            " Allows clicking past a certain column.
+endif
+
+" Clipboard settings.
+if has('clipboard')
+    set clipboard=unnamed       " Uses system clipboard as clipboard.
+
+    if has('unnamedplus')       " X11 support.
         set clipboard+=unnamedplus
     endif
 endif
+
+" Tab/indent settings.
+set tabstop=4                   " Number of spaces that each <Tab> counts for.
+set shiftwidth=4                " Number of spaces used for each autoindent, used for >>, <<.
+set smarttab                    " <Tab> at front of line inserts <shiftwidth> spaces instead of <tabstop>.
+set expandtab                   " Insert spaces with <Tab> instead of a <Tab>.
+set autoindent                  " Copy indent from current line when starting a new line.
+if exists('&breakindent')
+    set breakindent             " Indent wrappped lines to the same level.
+endif
+
+" Set the leader to space.
+let mapleader = " "
 
 " Setup colorscheme
 let g:rehash256 = 1
@@ -44,29 +83,35 @@ hi clear
 colorscheme molokai
 syntax on
 
-filetype off     " required for Vundle
+" Vundle plugins!
+filetype off                    " Required for Vundle
 
 set rtp+=~/.vim/bundle/Vundle.vim
 call vundle#begin()
 
-" let Vundle manage Vundle, required
+" Let Vundle manage Vundle, required.
 Plugin 'gmarik/Vundle.vim'
 
-" Keep bundle commands between here and filetype plugin indent on.
-" scripts on GitHub repos
 Plugin 'tpope/vim-fugitive'
 Plugin 'bling/vim-airline'
 Plugin 'kien/ctrlp.vim'
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
-Plugin 'octol/vim-cpp-enhanced-highlight'
+Plugin 'scrooloose/syntastic'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Valloric/ListToggle'
+Plugin 'nathanaelkane/vim-indent-guides'
+
+" Language specific extensions.
+Plugin 'LaTeX-Box-Team/LaTeX-Box'
+Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'wavded/vim-stylus'
 Plugin 'digitaltoad/vim-jade'
+Plugin 'kchmck/vim-coffee-script'
 
 call vundle#end()
+
+" Turn this back on.
 filetype plugin indent on
 
 " Treat <li> and <p> tags like the block tags they are
@@ -79,32 +124,39 @@ let g:airline#extensions#tabline#buffer_nr_show = 1
 let g:airline#extensions#tabline#buffer_nr_format = '%s│ '
 let g:airline_theme='powerlineish'
 
-set guifont=Meslo\ LG\ S\ DZ\ for\ Powerline:h14
 let g:Powerline_symbols = 'fancy'
-set encoding=utf-8
-set t_Co=256
-set fillchars+=vert:\│,stl:\ ,stlnc:\
-set term=xterm-256color
-set termencoding=utf-8
 
 " NERDTree settings
 let g:NERDTreeIgnore = ['\.pyc$', '\.o$', '\.dep$']
 
-" LaTeX-Box settings
-let g:LatexBox_latexmk_async = 1                 " Need this on so the quickfix automatically appears on error
-let g:LatexBox_latexmk_preview_continuously = 1  " Runs latexmk with -pvc so it watches the .tex file
-let g:LatexBox_quickfix = 2                      " Opens a quickfix window with errors but does not draw focus
-let g:LatexBox_viewer = 'open -a skim'
+" Syntastic settings
+let g:syntastic_aggregate_errors = 1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+
+let g:syntastic_error_symbol = '✗'
+let g:syntastic_warning_symbol = '!'
+let g:syntastic_style_error_symbol = 'S✗'
+let g:syntastic_style_warning_symbol = 'S!'
 
 " YouCompleteMe settings
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
-let g:ycm_always_populate_location_list = 1 " We don't use the location list for anything else
+let g:ycm_always_populate_location_list = 1     " We don't use the location list for anything else.
+
+" vim-indent-guides settings
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_start_level = 2
+let g:indent_guides_guide_size = 4
+
+" LaTeX-Box settings
+let g:LatexBox_latexmk_async = 1                " Need this on so the quickfix automatically appears on error
+let g:LatexBox_latexmk_preview_continuously = 1 " Runs latexmk with -pvc so it watches the .tex file
+let g:LatexBox_quickfix = 2                     " Opens a quickfix window with errors but does not draw focus
+let g:LatexBox_viewer = 'open -a skim'
 
 augroup vimrcEx
   autocmd!
-
-  " For all text files set 'textwidth' to 78 characters.
-  autocmd FileType text setlocal textwidth=78
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it for commit messages, when the position is invalid, or when
@@ -121,45 +173,11 @@ augroup vimrcEx
   " Enable spellchecking for Markdown
   autocmd FileType markdown setlocal spell
 
-  " Automatically wrap at 80 characters for Markdown
-  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
-
   " Set nice text editing for latex
   autocmd BufRead,BufNewFile *.tex set filetype=tex
-  autocmd BufRead,BufNewFile *.tex setlocal textwidth=80
   autocmd BufRead,BufNewFile *.tex set wrap
   autocmd FileType tex setlocal spell
 augroup END
-
-" Softtabs, 4 spaces, make tabs automatically go to right place instead of fixed width
-set tabstop=4
-set shiftwidth=4
-set smarttab
-set expandtab
-
-set ai "Auto indent
-
-" Display extra whitespace
-set list listchars=tab:»·,trail:·
-
-" Highlight characters past 80chars
-if exists('&colorcolumn')
-    set colorcolumn=81
-else
-    2mat ErrorMsg '\%81v.'
-endif
-
-" Line numbers
-set number
-set numberwidth=5
-
-" Snippets are activated by Shift+Tab
-let g:snippetsEmu_key = "<S-Tab>"
-
-" Better Silent that doesn't leave the screen blank
-command! -nargs=1 Silent
-    \ | execute ':silent '.<q-args>
-    \ | execute ':redraw!'
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -179,7 +197,8 @@ inoremap <Tab> <c-r>=InsertTabWrapper()<cr>
 " The Silver Searcher
 if executable('ag')
   " Use ag over grep
-  set grepprg=ag\ --nogroup\ --nocolor
+  set grepprg=ag\ --vimgrep\ $*
+  set grepformat=%f:%l:%c:%m
 
   " Use ag in CtrlP for listing files. Lightning fast and respects .gitignore
   let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
@@ -188,7 +207,7 @@ if executable('ag')
   let g:ctrlp_use_caching = 0
 
   " :Ag command
-  command -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
+  command! -nargs=+ -complete=file -bar Ag silent! grep! <args>|cwindow|redraw!
 endif
 
 " Switch between the last two files
@@ -197,16 +216,17 @@ nnoremap <leader><leader> <c-^>
 " Open NERDTree with leader-n
 nnoremap <leader>n :NERDTreeToggle<CR>
 
-" Buffer navigation
-nnoremap <leader>c  :bp\|bd #<CR>
-
 " Swap ; and :  Convenient.
 nnoremap ; :
 nnoremap : ;
 
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
+ " Navigate long, wrapped lines like normal lines.
+noremap <silent> k gk
+noremap <silent> j gj
+noremap <silent> 0 g0
+noremap <silent> $ g$
+noremap <silent> ^ g^
+noremap <silent> _ g_
 
 " Quicker window movement
 nnoremap <C-j> <C-w>j
@@ -217,18 +237,19 @@ nnoremap <C-l> <C-w>l
 " Use K to easily search for a word in the project
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
 vnoremap K y:grep! "\b<C-R>"\b"<CR>:cw<CR>
-nnoremap <Leader>k :cp<CR>
-nnoremap <Leader>j :cn<CR>
+noremap <C-n> :cn<CR>
+noremap <C-m> :cp<CR>
 
 " Quicker buffer movement
-nnoremap <S-h> :bp<CR>
-nnoremap <S-l> :bn<CR>
+noremap <S-h> :bp<CR>
+noremap <S-l> :bn<CR>
+nnoremap <leader>c  :bp\|bd #<CR>
 
 " Map <Leader>p to paste with no auto-indent
-nnoremap <Leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
+nnoremap <leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 
 " Press return to get out of highlighting
-nnoremap <CR> :nohlsearch<CR><CR>
+nnoremap <silent> <CR> :nohlsearch<CR><CR>
 
 " YouCompleteMe bindings
-nnoremap <leader>jd :YcmCompleter GoTo<CR>
+nnoremap <leader>gd :YcmCompleter GoTo<CR>
