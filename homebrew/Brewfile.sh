@@ -29,4 +29,5 @@ brew install hub
 brew install node
 brew install p7zip
 brew install tmux
+brew install reattach-to-user-namespace
 brew install watch

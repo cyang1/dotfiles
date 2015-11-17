@@ -101,6 +101,8 @@ Plugin 'scrooloose/syntastic'
 Plugin 'Valloric/YouCompleteMe'
 Plugin 'Valloric/ListToggle'
 Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'tpope/vim-surround'
+Plugin 'christoomey/vim-tmux-navigator'
 
 " Language specific extensions.
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
@@ -227,12 +229,6 @@ noremap <silent> 0 g0
 noremap <silent> $ g$
 noremap <silent> ^ g^
 noremap <silent> _ g_
-
-" Quicker window movement
-nnoremap <C-j> <C-w>j
-nnoremap <C-k> <C-w>k
-nnoremap <C-h> <C-w>h
-nnoremap <C-l> <C-w>l
 
 " Use K to easily search for a word in the project
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
