@@ -10,13 +10,14 @@ if (( ${+terminfo[smkx]} )) && (( ${+terminfo[rmkx]} )); then
     echoti smkx
   }
   function zle-line-finish() {
+    echo -ne "\033[2 q" # block cursor
     echoti rmkx
   }
   function zle-keymap-select() {
     if [ "$TERM_PROGRAM" = "iTerm.app" ]; then
       case $KEYMAP in
-        vicmd) echo -ne "\033]50;CursorShape=0\a";; # block cursor
-        viins|main) echo -ne "\033]50;CursorShape=1\a";; # line cursor
+        vicmd) echo -ne "\033[2 q";; # block cursor
+        viins|main) echo -ne "\033[6 q";; # line cursor
       esac
     fi
   }

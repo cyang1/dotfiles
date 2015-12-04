@@ -32,9 +32,6 @@ function omz_termsupport_preexec {
   local LINE="${2:gs/%/%%}"
 
   title '$CMD' '%100>...>$LINE%<<'
-
-  # reset the cursor to a block right before a command executes
-  echo -ne "\033]50;CursorShape=0\a" # block cursor
 }
 
 autoload -U add-zsh-hook
