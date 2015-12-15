@@ -21,6 +21,7 @@ brew install homebrew/dupes/screen
 brew install zsh
 
 # Install other useful binaries
+brew install ag
 brew install aria2
 brew install cmake
 brew install grc
@@ -29,5 +30,11 @@ brew install hub
 brew install node
 brew install p7zip
 brew install tmux
-brew install reattach-to-user-namespace
 brew install watch
+
+# Force link the new git
+brew link --overwrite git
+
+# Add the new zsh to /etc/shells and change the shell to zsh
+sudo bash -c 'echo /usr/local/bin/zsh >> /etc/shells'
+sudo bash -c 'chsh -s /usr/local/bin/zsh $SUDO_USER'

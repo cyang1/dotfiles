@@ -11,7 +11,7 @@
 sudo -v
 
 # Keep-alive: update existing `sudo` time stamp until `.osx` has finished
-while true; do sudo -n true; sleep 60; kill -0 "$$" || exit; done 2>/dev/null &
+while true; do sudo -n true; sleep 10; kill -0 "$$" || exit; done 2>/dev/null &
 
 # Show the ~/Library folder.
 chflags nohidden ~/Library
@@ -149,6 +149,10 @@ defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 
 # Bottom left screen corner → Dashboard
 defaults write com.apple.dock wvous-bl-corner -int 7
+defaults write com.apple.dock wvous-bl-modifier -int 0
+
+# Bottom right screen corner → Put display to sleep
+defaults write com.apple.dock wvous-bl-corner -int 10
 defaults write com.apple.dock wvous-bl-modifier -int 0
 
 # Require password immediately after sleep or screen saver.

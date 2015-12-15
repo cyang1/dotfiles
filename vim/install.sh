@@ -1,2 +1,2 @@
 vim +PluginInstall +qall
-( cd vim/vim.symlink/bundle/YouCompleteMe && ./install.sh --clang-completer )
+( cd vim/vim.symlink/bundle/YouCompleteMe && ./install.py --clang-completer )
