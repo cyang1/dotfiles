@@ -7,10 +7,10 @@ brew install moreutils
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed
 brew install findutils
 # Install GNU `sed`, overwriting the built-in `sed`
-brew install gnu-sed --default-names
+brew install gnu-sed --with-default-names
 
 # Install wget with IRI support
-brew install wget --enable-iri
+brew install wget --with-iri
 
 # Install more recent versions of some OS X tools
 brew install git
@@ -36,5 +36,5 @@ brew install watch
 brew link --overwrite git
 
 # Add the new zsh to /etc/shells and change the shell to zsh
-sudo bash -c 'echo /usr/local/bin/zsh >> /etc/shells'
+sudo bash -c 'grep -qF /usr/local/bin/zsh /etc/shells || echo /usr/local/bin/zsh >> /etc/shells'
 sudo bash -c 'chsh -s /usr/local/bin/zsh $SUDO_USER'
