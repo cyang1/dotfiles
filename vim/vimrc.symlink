@@ -103,6 +103,8 @@ Plugin 'Valloric/ListToggle'
 Plugin 'nathanaelkane/vim-indent-guides'
 Plugin 'tpope/vim-surround'
 Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'tpope/vim-obsession'
+Plugin 'tpope/vim-commentary'
 
 " Language specific extensions.
 Plugin 'LaTeX-Box-Team/LaTeX-Box'
