@@ -82,16 +82,31 @@ function prompt_char() {
   if [ $UID -eq 0 ]; then echo "%{$fg[red]%}#%{$reset_color%}"; else echo $; fi
 }
 
-local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%}) "
 
 function virtualenv_info() {
   [ $VIRTUAL_ENV ] && echo "%{$fg[cyan]%}("`basename $VIRTUAL_ENV`")%{$reset_color%} "
+}
+
+local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%}) "
+
+function timer_preexec() {
+  cmd_start_time=$SECONDS
+}
+
+autoload -U add-zsh-hook
+add-zsh-hook preexec timer_preexec
+
+function time_taken() {
+  if [ $cmd_start_time ]; then
+    local elapsed=$(($SECONDS - $cmd_start_time))
+    (( $elapsed > 10 )) && echo "%{$fg[yellow]%}${elapsed}s%{$reset_color%} "
+  fi
 }
 
 local time_str="%{$fg[green]%}[%*]%{$reset_color%}"
 
 PROMPT='
 $(prompt_context)${cur_dir}$(git_dirty)$(untracked_status)
- $(prompt_char) '
+ $(prompt_char) $(virtualenv_info)'
 PROMPT2='%{$fg[red]%}   %_%{$reset_color%}> '
-RPROMPT='${return_code}$(virtualenv_info)${time_str}'
+RPROMPT='${return_code}$(time_taken)${time_str}'
