@@ -7,22 +7,22 @@ autoload colors && colors
 if (( $+commands[git] )); then
   git="$commands[git]"
 else
-  git="/usr/bin/git"
+  git='/usr/bin/git'
 fi
 
 function in_git_repo() {
-  $git status -s &> /dev/null
+  $git rev-parse --is-inside-work-tree &> /dev/null
 }
 
 function git_dirty() {
   in_git_repo || return
   if [[ $POST_1_7_2_GIT -gt 0 ]]; then
-    SUBMODULE_SYNTAX="--ignore-submodules=dirty"
+    SUBMODULE_SYNTAX='--ignore-submodules=dirty'
   fi
-  if [[ $($git status ${SUBMODULE_SYNTAX} --porcelain -uno) == "" ]]; then
-    echo " on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
+  if [[ $($git status ${SUBMODULE_SYNTAX} --porcelain -uno) == '' ]]; then
+    echo " on %B%F{green}$(git_prompt_info)%f%b"
   else
-    echo " on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
+    echo " on %B%F{red}$(git_prompt_info)%f%b"
   fi
 }
 
@@ -32,7 +32,7 @@ function git_prompt_info() {
 }
 
 function untracked_status() {
-  no_untracked || echo "%{$fg[yellow]%}?%{$reset_color%}"
+  no_untracked || echo '%F{yellow}?%f'
 }
 
 function no_untracked() {
@@ -60,7 +60,7 @@ function git_compare_version() {
 }
 
 # this is unlikely to change so make it all statically assigned
-POST_1_7_2_GIT=$(git_compare_version "1.7.2")
+POST_1_7_2_GIT=$(git_compare_version '1.7.2')
 # clean up the namespace slightly by removing the checker function
 unset -f git_compare_version
 
@@ -68,45 +68,51 @@ unset -f git_compare_version
 # NORMAL PROMPT FUNCTIONS
 #############################
 
+# More accurate SECONDS!
+typeset -F SECONDS
+
 function prompt_context() {
   local user=`whoami`
 
   if [[ "$user" != "$DEFAULT_USER" || -n "$SSH_CLIENT" ]]; then
-    echo "%{$fg_bold[white]%}%n%{$reset_color%} at %{$fg_bold[black]%}%m%{$reset_color%} in "
+    echo '%B%F{white}%n%f%b at %B%F{black}%m%f%b in '
   fi
 }
 
-local cur_dir="%{$fg_bold[blue]%}%~%{$reset_color%}"
+cur_dir='%B%F{blue}%~%f%b'
 
-function prompt_char() {
-  if [ $UID -eq 0 ]; then echo "%{$fg[red]%}#%{$reset_color%}"; else echo $; fi
-}
-
+prompt_char='%(0#.%F{red}#%f.$)'
 
 function virtualenv_info() {
-  [ $VIRTUAL_ENV ] && echo "%{$fg[cyan]%}("`basename $VIRTUAL_ENV`")%{$reset_color%} "
+  [ $VIRTUAL_ENV ] && echo "%F{cyan}($(basename $VIRTUAL_ENV))%f "
 }
 
-local return_code="%(?..%{$fg[red]%}%? ↵%{$reset_color%}) "
+return_code='%(?..%F{red}%? ↵%f) '
 
 function timer_preexec() {
-  cmd_start_time=$SECONDS
+  CMD_START_TIME=$SECONDS
+}
+
+function timer_precmd() {
+  local elapsed=$(($SECONDS - ${CMD_START_TIME:-$SECONDS}))
+  if (( $elapsed > 3 )); then
+    psvar[1]=$(printf '%.2f' $elapsed)
+  else
+    psvar[1]=
+  fi
+  CMD_START_TIME=
 }
 
 autoload -U add-zsh-hook
 add-zsh-hook preexec timer_preexec
+add-zsh-hook precmd timer_precmd
 
-function time_taken() {
-  if [ $cmd_start_time ]; then
-    local elapsed=$(($SECONDS - $cmd_start_time))
-    (( $elapsed > 10 )) && echo "%{$fg[yellow]%}${elapsed}s%{$reset_color%} "
-  fi
-}
+time_taken='%(1V.%F{yellow}%1vs%f .)'
 
-local time_str="%{$fg[green]%}[%*]%{$reset_color%}"
+time_str='%F{green}[%*]%f'
 
 PROMPT='
 $(prompt_context)${cur_dir}$(git_dirty)$(untracked_status)
- $(prompt_char) $(virtualenv_info)'
-PROMPT2='%{$fg[red]%}   %_%{$reset_color%}> '
-RPROMPT='${return_code}$(time_taken)${time_str}'
+ ${prompt_char} $(virtualenv_info)'
+PROMPT2='%F{red}   %_%f> '
+RPROMPT='${return_code}${time_taken}${time_str}'
