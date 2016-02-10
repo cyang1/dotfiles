@@ -93,8 +93,10 @@ call vundle#begin()
 Plugin 'gmarik/Vundle.vim'
 
 Plugin 'tpope/vim-fugitive'
-Plugin 'bling/vim-airline'
+Plugin 'vim-airline/vim-airline'
+Plugin 'vim-airline/vim-airline-themes'
 Plugin 'kien/ctrlp.vim'
+Plugin 'JazzCore/ctrlp-cmatcher'
 Plugin 'scrooloose/nerdtree'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'scrooloose/syntastic'
@@ -129,6 +131,9 @@ let g:airline#extensions#tabline#buffer_nr_format = '%s│ '
 let g:airline_theme='powerlineish'
 
 let g:Powerline_symbols = 'fancy'
+
+" Ctrl-p settings
+let g:ctrlp_match_func = {'match' : 'matcher#cmatch' }
 
 " NERDTree settings
 let g:NERDTreeIgnore = ['\.pyc$', '\.o$', '\.dep$']
@@ -223,14 +228,6 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 " Swap ; and :  Convenient.
 nnoremap ; :
 nnoremap : ;
-
- " Navigate long, wrapped lines like normal lines.
-noremap <silent> k gk
-noremap <silent> j gj
-noremap <silent> 0 g0
-noremap <silent> $ g$
-noremap <silent> ^ g^
-noremap <silent> _ g_
 
 " Use K to easily search for a word in the project
 nnoremap K :grep! "\b<C-R><C-W>\b"<CR>:cw<CR>
