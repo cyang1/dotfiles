@@ -31,7 +31,7 @@ bind K resize-pane -U 5
 bind L resize-pane -R 5
 
 # history settings
-bind k clear-history
+bind k send-keys -R \; clear-history
 
 # mouse scrolling
 set -g mouse on
@@ -101,7 +101,7 @@ setw -g window-status-current-attr bright
 
 # show host name and IP address on left side of status bar
 set -g status-left-length 100
-set -g status-left "#[fg=brightwhite]#h  #($ZSH/tmux/tmux-network)#(uptime | egrep '[0-9]+\\.[0-9]+' -o | xargs echo) "
+set -g status-left "#[fg=brightwhite]#h  #[fg=default]#($ZSH/tmux/tmux-network)#(uptime | egrep '[0-9]+\\.[0-9]+' -o | xargs echo) "
 
 # show session name, window & pane number, date and time on right side of
 # status bar
