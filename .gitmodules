@@ -10,3 +10,6 @@
 [submodule "tmux/tmux.symlink/plugins/tpm"]
 	path = tmux/tmux.symlink/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm.git
+[submodule "bin/gcalcli"]
+	path = bin/gcalcli.git
+	url = https://github.com/aftbit/gcalcli.git

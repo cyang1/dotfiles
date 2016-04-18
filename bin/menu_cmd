@@ -1,0 +1,104 @@
+#!/usr/bin/env python
+
+import objc
+import subprocess
+import sys
+from AppKit import (
+    NSApp,
+    NSApplication,
+    NSApplicationActivationPolicyAccessory,
+    NSMenu,
+    NSMenuItem,
+    NSObject,
+    NSStatusBar,
+    NSTimer,
+    NSVariableStatusItemLength,
+)
+
+# How often to check the command (in seconds).
+CHECK_INTERVAL = 60
+
+NSStatusBarItemPriorityDefault = 1000
+NSStatusBarItemPrioritySystem = 2147483645
+NSStatusBarItemPrioritySpotlight = 2147483646
+NSStatusBarItemPriorityNotificationCenter = 2147483647
+
+# (int) The higher the priority, the farther to the right the status item will be.
+PRIORITY = 0
+
+class ApplicationDelegate(NSObject):
+    @objc.signature('v@:@')
+    def applicationDidFinishLaunching_(self, notification):
+        # Hide the dock icon.
+        NSApp.setActivationPolicy_(NSApplicationActivationPolicyAccessory)
+
+        self.command = sys.argv[1:]
+
+        self.status_item = NSStatusBar.systemStatusBar()._statusItemWithLength_withPriority_(NSVariableStatusItemLength, PRIORITY)
+        self.status_item.button().setTitle_("Running %s..." % self.command[0])
+
+        self.menu = NSMenu.alloc().initWithTitle_('system_menu')
+        self.status_item.setMenu_(self.menu)
+
+        self.quit_item = NSMenuItem.alloc().initWithTitle_action_keyEquivalent_('Quit', self.exit, 'q')
+        self.menu.addItem_(self.quit_item)
+
+        NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
+            CHECK_INTERVAL, self, self.runCommand_, None, True
+        )
+
+        self.runCommand_(self)
+
+    @objc.signature('v@:@')
+    def runCommand_(self, sender):
+        process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        NSTimer.scheduledTimerWithTimeInterval_target_selector_userInfo_repeats_(
+            0.5, self, self.checkProcess_, process, True
+        )
+
+    @objc.signature('v@:@')
+    def checkProcess_(self, sender):
+        process = sender.userInfo()
+        if process.poll() is not None:
+            sender.invalidate()
+
+            results, _ = process.communicate()
+            if process.returncode == 0:
+                self.updateStatusItemWith_(results)
+            else:
+                self.updateStatusItemWith_("Error: %s returned %d\n%s" % (
+                    ' '.join(self.command),
+                    process.returncode,
+                    results,
+                ))
+
+    def updateStatusItemWith_(self, output):
+        events = output.strip().split('\n')
+        first = events.pop(0)
+
+        self.status_item.button().setTitle_(first)
+
+        # First remove all current items.
+        self.menu.removeAllItems()
+
+        # Now populate the menu.
+        for event in events:
+            if event == '':
+                self.menu.addItem_(NSMenuItem.separatorItem())
+            else:
+                self.menu.addItemWithTitle_action_keyEquivalent_(event, None, '')
+
+        if len(events) > 0:
+            self.menu.addItem_(NSMenuItem.separatorItem())
+
+        self.menu.addItem_(self.quit_item)
+
+    @objc.signature('v@:')
+    def exit(self):
+        NSApplication.sharedApplication().terminate_(self)
+
+if __name__ == '__main__':
+    app = NSApplication.sharedApplication()
+    delegate = ApplicationDelegate.alloc().init()
+    app.setDelegate_(delegate)
+    app.run()
