@@ -51,7 +51,7 @@ set hlsearch                    " Turn on search highlighting.
 
 " Mouse settings.
 set mouse=a                     " Enable mouse support.
-if has('mouse_sgr')
+if exists(':ttymouse') && has('mouse_sgr')
     set ttymouse=sgr            " Allows clicking past a certain column.
 endif
 

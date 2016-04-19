@@ -27,6 +27,7 @@ brew install cmake
 brew install grc
 brew install htop-osx
 brew install hub
+brew install neovim/neovim/neovim --with-release
 brew install node
 brew install p7zip
 brew install tmux
