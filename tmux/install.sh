@@ -1,1 +1,1 @@
-./tmux.symlink/plugins/tpm/bin/install_plugins
+( cd tmux/tmux.symlink/plugins/tpm/bin && ./install_plugins )
