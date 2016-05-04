@@ -26,6 +26,9 @@ NSStatusBarItemPriorityNotificationCenter = 2147483647
 # (int) The higher the priority, the farther to the right the status item will be.
 PRIORITY = 0
 
+# (int) Maximum number of characters to show in the title.
+MAX_TITLE_LENGTH = 50
+
 class ApplicationDelegate(NSObject):
     @objc.signature('v@:@')
     def applicationDidFinishLaunching_(self, notification):
@@ -75,6 +78,8 @@ class ApplicationDelegate(NSObject):
     def updateStatusItemWith_(self, output):
         events = output.strip().split('\n')
         first = events.pop(0)
+        if len(first) > MAX_TITLE_LENGTH:
+            first = first[:MAX_TITLE_LENGTH] + '...'
 
         self.status_item.button().setTitle_(first)
 
