@@ -32,10 +32,12 @@ EL_CAPITAN_SUFFIX=' present: true'
 
 if command -v pmset >/dev/null 2>&1; then
     IFS=';' batt=($(pmset -g batt | egrep '([0-9]+\%).*' -o))
-    batt[2]=${batt[2]%$EL_CAPITAN_SUFFIX}
+    if [ -n "${batt}" ]; then
+        batt[2]=${batt[2]%$EL_CAPITAN_SUFFIX}
 
-    if [ "${batt[1]}" != ' discharging' ]; then charge_icon=' ⚡'; fi
-    [[ "${batt[2]}" =~ \(.+\) ]] || batt[2]=" (${batt[2]:1})"
+        if [ "${batt[1]}" != ' discharging' ]; then charge_icon=' ⚡'; fi
+        [[ "${batt[2]}" =~ \(.+\) ]] || batt[2]=" (${batt[2]:1})"
 
-    echo "  ${batt[0]}${charge_icon}${batt[2]}" | colorize_percent
+        echo "  ${batt[0]}${charge_icon}${batt[2]}" | colorize_percent
+    fi
 fi
