@@ -74,6 +74,10 @@ if exists('&breakindent')
     set breakindent             " Indent wrappped lines to the same level.
 endif
 
+" Parser settings.
+set modelines=0
+set nomodeline
+
 " Set the leader to space.
 let mapleader = " "
 
@@ -114,6 +118,10 @@ Plugin 'octol/vim-cpp-enhanced-highlight'
 Plugin 'wavded/vim-stylus'
 Plugin 'digitaltoad/vim-jade'
 Plugin 'kchmck/vim-coffee-script'
+Plugin 'PProvost/vim-ps1'
+Plugin 'rust-lang/rust.vim'
+Plugin 'pangloss/vim-javascript'
+Plugin 'mxw/vim-jsx'
 
 call vundle#end()
 
@@ -148,6 +156,12 @@ let g:syntastic_error_symbol = '✗'
 let g:syntastic_warning_symbol = '!'
 let g:syntastic_style_error_symbol = 'S✗'
 let g:syntastic_style_warning_symbol = 'S!'
+
+let g:syntastic_python_checkers = ['pep8', 'pylint', 'python', 'pydocstyle', 'mypy']
+let g:syntastic_javascript_checkers = ['eslint']
+if executable('node_modules/.bin/eslint')
+    let g:syntastic_javascript_eslint_exec = 'node_modules/.bin/eslint'
+endif
 
 " YouCompleteMe settings
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'
