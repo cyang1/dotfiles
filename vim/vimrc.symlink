@@ -87,46 +87,52 @@ hi clear
 colorscheme molokai
 syntax on
 
-" Vundle plugins!
-filetype off                    " Required for Vundle
+" Dein plugins!
 
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
+set runtimepath+=~/.vim/bundle/repos/github.com/Shougo/dein.vim
+call dein#begin('~/.vim/bundle')
 
-" Let Vundle manage Vundle, required.
-Plugin 'gmarik/Vundle.vim'
+" Let Dein manage Dein, required.
+call dein#add('Shougo/dein.vim')
 
-Plugin 'tpope/vim-fugitive'
-Plugin 'vim-airline/vim-airline'
-Plugin 'vim-airline/vim-airline-themes'
-Plugin 'kien/ctrlp.vim'
-Plugin 'JazzCore/ctrlp-cmatcher'
-Plugin 'scrooloose/nerdtree'
-Plugin 'airblade/vim-gitgutter'
-Plugin 'scrooloose/syntastic'
-Plugin 'Valloric/YouCompleteMe'
-Plugin 'Valloric/ListToggle'
-Plugin 'nathanaelkane/vim-indent-guides'
-Plugin 'tpope/vim-surround'
-Plugin 'christoomey/vim-tmux-navigator'
-Plugin 'tpope/vim-obsession'
-Plugin 'tpope/vim-commentary'
+call dein#add('tpope/vim-fugitive')
+call dein#add('vim-airline/vim-airline')
+call dein#add('vim-airline/vim-airline-themes')
+call dein#add('kien/ctrlp.vim')
+call dein#add('JazzCore/ctrlp-cmatcher', {'build': './install.sh'})
+call dein#add('scrooloose/nerdtree')
+call dein#add('airblade/vim-gitgutter')
+call dein#add('scrooloose/syntastic')
+call dein#add('Valloric/YouCompleteMe', {'build': './install.py --clang-completer'})
+call dein#add('Valloric/ListToggle')
+call dein#add('nathanaelkane/vim-indent-guides')
+call dein#add('tpope/vim-surround')
+call dein#add('christoomey/vim-tmux-navigator')
+call dein#add('tpope/vim-obsession')
+call dein#add('tpope/vim-commentary')
 
 " Language specific extensions.
-Plugin 'LaTeX-Box-Team/LaTeX-Box'
-Plugin 'octol/vim-cpp-enhanced-highlight'
-Plugin 'wavded/vim-stylus'
-Plugin 'digitaltoad/vim-jade'
-Plugin 'kchmck/vim-coffee-script'
-Plugin 'PProvost/vim-ps1'
-Plugin 'rust-lang/rust.vim'
-Plugin 'pangloss/vim-javascript'
-Plugin 'mxw/vim-jsx'
+call dein#add('LaTeX-Box-Team/LaTeX-Box')
+call dein#add('octol/vim-cpp-enhanced-highlight')
+call dein#add('wavded/vim-stylus')
+call dein#add('digitaltoad/vim-jade')
+call dein#add('kchmck/vim-coffee-script')
+call dein#add('PProvost/vim-ps1')
+call dein#add('rust-lang/rust.vim')
+call dein#add('pangloss/vim-javascript')
+call dein#add('mxw/vim-jsx')
+call dein#add('leafgarland/typescript-vim') " Syntax-highlighting
+call dein#add('Shougo/vimproc.vim', {'build' : 'make'})
+call dein#add('Quramy/tsuquyomi')
 
-call vundle#end()
+call dein#end()
 
-" Turn this back on.
+" Required
 filetype plugin indent on
+
+if dein#check_install()
+    call dein#install()
+endif
 
 " Treat <li> and <p> tags like the block tags they are
 let g:html_indent_tags = 'li\|p'
@@ -162,6 +168,9 @@ let g:syntastic_javascript_checkers = ['eslint']
 if executable('node_modules/.bin/eslint')
     let g:syntastic_javascript_eslint_exec = 'node_modules/.bin/eslint'
 endif
+
+let g:tsuquyomi_disable_quickfix = 1
+let g:syntastic_typescript_checkers = ['tsuquyomi'] " You shouldn't use 'tsc' checker.
 
 " YouCompleteMe settings
 let g:ycm_global_ycm_extra_conf = '~/.vim/ycm_extra_conf.py'

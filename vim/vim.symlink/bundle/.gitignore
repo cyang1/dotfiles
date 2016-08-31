@@ -3,4 +3,4 @@
 
 # But not these files...
 !.gitignore
-!Vundle.vim
+!repos/github.com/Shougo/dein.vim

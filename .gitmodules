@@ -1,9 +1,6 @@
 [submodule "zsh/zsh-syntax-highlighting.ignore"]
 	path = zsh/zsh-syntax-highlighting.ignore
 	url = https://github.com/zsh-users/zsh-syntax-highlighting.git
-[submodule "vim/vim.symlink/bundle/Vundle.vim"]
-	path = vim/vim.symlink/bundle/Vundle.vim
-	url = https://github.com/gmarik/Vundle.vim.git
 [submodule "fasd"]
 	path = fasd
 	url = https://github.com/clvv/fasd.git
@@ -13,3 +10,6 @@
 [submodule "bin/gcalcli"]
 	path = bin/gcalcli.git
 	url = https://github.com/cyang1/gcalcli.git
+[submodule "vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim"]
+	path = vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim
+	url = https://github.com/Shougo/dein.vim.git
