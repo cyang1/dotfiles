@@ -20,8 +20,10 @@ brew install homebrew/dupes/grep
 brew install homebrew/dupes/screen
 brew install zsh
 
+# Regression in macOS Sierra https://github.com/tmux/tmux/issues/543
+brew install reattach-to-user-namespace
+
 # Install other useful binaries
-brew install ag
 brew install aria2
 brew install cmake
 brew install grc
@@ -30,6 +32,7 @@ brew install hub
 brew install neovim/neovim/neovim --with-release
 brew install node
 brew install p7zip
+brew install the_silver_searcher
 brew install tmux
 brew install watch
 

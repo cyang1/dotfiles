@@ -9,7 +9,11 @@ export LSCOLORS="exfxcxdxbxegedabagacad"
 export CLICOLOR=true
 
 # `ls` colors for the rest of us
-eval $(dircolors -b $ZSH/zsh/dircolors.trapd00r)
+if (( $+commands[dircolors] )); then
+  eval $(dircolors -b $ZSH/zsh/dircolors.trapd00r)
+elif (( $+commands[gdircolors] )); then
+  eval $(gdircolors -b $ZSH/zsh/dircolors.trapd00r)
+fi
 
 # Pretty colors during tab completion
 zstyle ':completion:*' list-colors ${(s.:.)LS_COLORS}
