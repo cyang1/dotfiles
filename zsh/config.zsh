@@ -22,6 +22,9 @@ fpath=($ZSH/functions $fpath)
 
 autoload -U $ZSH/functions/*(:t)
 
+# 10ms timeout for key sequences
+KEYTIMEOUT=1
+
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
 SAVEHIST=10000

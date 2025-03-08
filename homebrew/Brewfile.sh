@@ -14,14 +14,9 @@ brew install wget --with-iri
 
 # Install more recent versions of some OS X tools
 brew install git
-brew install python # Must go before vim
-brew install vim --override-system-vi
-brew install homebrew/dupes/grep
-brew install homebrew/dupes/screen
+brew install grep
+brew install screen
 brew install zsh
-
-# Regression in macOS Sierra https://github.com/tmux/tmux/issues/543
-brew install reattach-to-user-namespace
 
 # Install other useful binaries
 brew install aria2
@@ -29,12 +24,21 @@ brew install cmake
 brew install grc
 brew install htop-osx
 brew install hub
-brew install neovim/neovim/neovim --with-release
 brew install node
 brew install p7zip
-brew install the_silver_searcher
+brew install python3
 brew install tmux
 brew install watch
+
+# Neovim and Python plugin
+brew install neovim
+python3 -mpip install pynvim
+
+# File utilities
+brew install bat
+brew install fzf
+brew install git-delta
+brew install ripgrep
 
 # Force link the new git
 brew link --overwrite git

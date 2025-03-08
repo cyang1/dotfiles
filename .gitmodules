@@ -7,9 +7,6 @@
 [submodule "tmux/tmux.symlink/plugins/tpm"]
 	path = tmux/tmux.symlink/plugins/tpm
 	url = https://github.com/tmux-plugins/tpm.git
-[submodule "bin/gcalcli"]
-	path = bin/gcalcli.git
-	url = https://github.com/cyang1/gcalcli.git
 [submodule "vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim"]
 	path = vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim
 	url = https://github.com/Shougo/dein.vim.git

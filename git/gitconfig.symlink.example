@@ -20,8 +20,15 @@
         branch = auto
         ui = true
 [core]
+        commitGraph = true
         excludesfile = ~/.gitignore
-        editor = vim
+        editor = nvim
+        pager = delta
+[delta]
+        line-numbers = true
+        syntax-theme = Monokai Extended
+[interactive]
+        diffFilter = delta --color-only
 [apply]
         whitespace = nowarn
 [mergetool]
@@ -38,3 +45,7 @@
         #
         # Setting to git 2.0 default to surpress warning message
         default = simple
+[gc]
+        writeCommitGraph = true
+[fetch]
+        writeCommitGraph = true

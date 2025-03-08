@@ -1,16 +1,15 @@
-
 " Vim color file
 "
 " Author: Tomas Restrepo <tomas@winterdom.com>
+" https://github.com/tomasr/molokai
 "
-" Note: Based on the monokai theme for textmate
+" Note: Based on the Monokai theme for TextMate
 " by Wimer Hazenberg and its darker variant
 " by Hamish Stuart Macpherson
 "
 
 hi clear
 
-set background=dark
 if version > 580
     " no guarantees for version 5.8 and below, but this makes it stop
     " complaining
@@ -27,6 +26,17 @@ else
     let s:molokai_original = 0
 endif
 
+if exists("g:molokai_italic")
+    let s:molokai_italic = g:molokai_italic
+else
+    let s:molokai_italic = 1
+endif
+
+if exists("g:molokai_transparent")
+    let s:molokai_transparent = g:molokai_transparent
+else
+    let s:molokai_transparent = 0
+endif
 
 hi Boolean         guifg=#AE81FF
 hi Character       guifg=#E6DB74
@@ -42,10 +52,20 @@ hi Delimiter       guifg=#8F8F8F
 hi DiffAdd                       guibg=#13354A
 hi DiffChange      guifg=#89807D guibg=#4C4745
 hi DiffDelete      guifg=#960050 guibg=#1E0010
-hi DiffText                      guibg=#4C4745 gui=italic,bold
+if s:molokai_italic
+    hi DiffText                  guibg=#4C4745 gui=italic,bold
+else
+    hi DiffText                  guibg=#4C4745 gui=bold
+endif
 
 hi Directory       guifg=#A6E22E               gui=bold
-hi Error           guifg=#E6DB74 guibg=#1E0010
+
+"markdown
+hi markdownCodeDelimiter        guifg=#A6E22E
+hi markdownCode                 guifg=#A6E22E
+hi markdownCodeBlock            guifg=#A6E22E
+
+hi Error           guifg=#E6DB74 guibg=#ff3333
 hi ErrorMsg        guifg=#F92672 guibg=#232526 gui=bold
 hi Exception       guifg=#A6E22E               gui=bold
 hi Float           guifg=#AE81FF
@@ -58,8 +78,13 @@ hi IncSearch       guifg=#C4BE89 guibg=#000000
 
 hi Keyword         guifg=#F92672               gui=bold
 hi Label           guifg=#E6DB74               gui=none
-hi Macro           guifg=#C4BE89               gui=italic
-hi SpecialKey      guifg=#66D9EF               gui=italic
+if s:molokai_italic
+    hi Macro       guifg=#C4BE89               gui=italic
+    hi SpecialKey  guifg=#66D9EF               gui=italic
+else
+    hi Macro       guifg=#C4BE89
+    hi SpecialKey  guifg=#66D9EF
+endif
 
 hi MatchParen      guifg=#000000 guibg=#FD971F gui=bold
 hi ModeMsg         guifg=#E6DB74
@@ -67,21 +92,29 @@ hi MoreMsg         guifg=#E6DB74
 hi Operator        guifg=#F92672
 
 " complete menu
-hi Pmenu           guifg=#66D9EF guibg=#000000
-hi PmenuSel                      guibg=#808080
-hi PmenuSbar                     guibg=#080808
-hi PmenuThumb      guifg=#66D9EF
+hi Pmenu           guifg=#66D9EF guibg=#303030
+hi PmenuSel        guifg=#FD971F guibg=#262626
+hi PmenuSbar                     guibg=#1C1C1C
+hi PmenuThumb      guifg=#66D9EF guibg=#FF8700
 
 hi PreCondit       guifg=#A6E22E               gui=bold
 hi PreProc         guifg=#A6E22E
 hi Question        guifg=#66D9EF
 hi Repeat          guifg=#F92672               gui=bold
-hi Search          guifg=#FFFFFF guibg=#455354
+hi Search          guifg=#000000 guibg=#FFE792
+
 " marks
+hi SyntasticErrorSign   guifg=#F92672 guibg=#232526
+hi SyntasticWarningSign guifg=#E6DB74 guibg=#232526
+
 hi SignColumn      guifg=#A6E22E guibg=#232526
 hi SpecialChar     guifg=#F92672               gui=bold
 hi SpecialComment  guifg=#7E8E91               gui=bold
-hi Special         guifg=#66D9EF guibg=bg      gui=italic
+if s:molokai_italic
+    hi Special     guifg=#66D9EF guibg=bg      gui=italic
+else
+    hi Special     guifg=#66D9EF guibg=bg
+endif
 if has("spell")
     hi SpellBad    guisp=#FF0000 gui=undercurl
     hi SpellCap    guisp=#7070F0 gui=undercurl
@@ -91,9 +124,17 @@ endif
 hi Statement       guifg=#F92672               gui=bold
 hi StatusLine      guifg=#455354 guibg=fg
 hi StatusLineNC    guifg=#808080 guibg=#080808
-hi StorageClass    guifg=#FD971F               gui=italic
+if s:molokai_italic
+    hi StorageClass guifg=#FD971F              gui=italic
+else
+    hi StorageClass guifg=#FD971F
+endif
 hi Structure       guifg=#66D9EF
-hi Tag             guifg=#F92672               gui=italic
+if s:molokai_italic
+    hi Tag         guifg=#F92672               gui=italic
+else
+    hi Tag         guifg=#F92672
+endif
 hi Title           guifg=#ef5939
 hi Todo            guifg=#FFFFFF guibg=bg      gui=bold
 
@@ -109,6 +150,23 @@ hi WildMenu        guifg=#66D9EF guibg=#000000
 
 hi TabLineFill     guifg=#1B1D1E guibg=#1B1D1E
 hi TabLine         guibg=#1B1D1E guifg=#808080 gui=none
+
+" Highlights for vim-indent-guides
+hi IndentGuidesOdd               guibg=#1C1C1C
+hi IndentGuidesEven              guibg=#262626
+
+" Highlights for vim-signify
+hi SignifySignAdd      guifg=#87FF5F guibg=#232526 gui=bold
+hi SignifySignDelete   guifg=#D75F5F guibg=#232526 gui=bold
+hi SignifySignChange   guifg=#FFFF5F guibg=#232526 gui=bold
+hi link SignifySignChangeDelete    SignifySignChange
+hi link SignifySignDeleteFirstLine SignifySignDelete
+
+" Highlights for csv.vim
+hi CSVColumnHeaderOdd                guibg=#1C1C1C gui=bold
+hi CSVColumnHeaderEven               guibg=#303030 gui=bold
+hi CSVColumnOdd                      guibg=#1C1C1C
+hi CSVColumnEven                     guibg=#303030
 
 if s:molokai_original == 1
    hi Normal          guifg=#F8F8F2 guibg=#272822
@@ -140,16 +198,17 @@ if &t_Co > 255
       hi Normal                   ctermbg=234
       hi CursorLine               ctermbg=235   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
-
-      hi IndentGuidesOdd          ctermbg=234
-      hi IndentGuidesEven         ctermbg=235
+      hi CursorColumn             ctermbg=235
+   elseif s:molokai_transparent == 1
+      hi Normal       ctermfg=252 ctermbg=none
+      hi CursorLine               ctermbg=234   cterm=none
+      hi CursorLineNr ctermfg=208               cterm=none
+      hi CursorColumn             ctermbg=234
    else
       hi Normal       ctermfg=252 ctermbg=233
       hi CursorLine               ctermbg=234   cterm=none
       hi CursorLineNr ctermfg=208               cterm=none
-
-      hi IndentGuidesOdd          ctermbg=233
-      hi IndentGuidesEven         ctermbg=234
+      hi CursorColumn             ctermbg=234
    endif
    hi Boolean         ctermfg=135
    hi Character       ctermfg=144
@@ -168,7 +227,13 @@ if &t_Co > 255
    hi DiffText                    ctermbg=102 cterm=bold
 
    hi Directory       ctermfg=118               cterm=bold
-   hi Error           ctermfg=219 ctermbg=89
+
+   "markdown
+   hi markdownCodeDelimiter         ctermfg=118
+   hi markdownCode                  ctermfg=118
+   hi markdownCodeBlock             ctermfg=118
+
+   hi Error           ctermfg=255 ctermbg=196
    hi ErrorMsg        ctermfg=199 ctermbg=16    cterm=bold
    hi Exception       ctermfg=118               cterm=bold
    hi Float           ctermfg=135
@@ -184,24 +249,27 @@ if &t_Co > 255
    hi Macro           ctermfg=193
    hi SpecialKey      ctermfg=81
 
-   hi MatchParen      ctermfg=208  ctermbg=233 cterm=bold
+   hi MatchParen      ctermfg=233  ctermbg=208 cterm=bold
    hi ModeMsg         ctermfg=229
    hi MoreMsg         ctermfg=229
    hi Operator        ctermfg=161
 
    " complete menu
-   hi Pmenu           ctermfg=81  ctermbg=16
-   hi PmenuSel        ctermfg=81  ctermbg=244
-   hi PmenuSbar                   ctermbg=232
-   hi PmenuThumb      ctermfg=81
+   hi Pmenu           ctermfg=81  ctermbg=236
+   hi PmenuSel        ctermfg=208 ctermbg=235
+   hi PmenuSbar                   ctermbg=234
+   hi PmenuThumb      ctermfg=81  ctermbg=208
 
    hi PreCondit       ctermfg=118               cterm=bold
    hi PreProc         ctermfg=118
    hi Question        ctermfg=81
    hi Repeat          ctermfg=161               cterm=bold
-   hi Search          ctermfg=253 ctermbg=66
+   hi Search          ctermfg=0   ctermbg=222   cterm=NONE
 
    " marks column
+   hi SyntasticErrorSign   ctermfg=161 ctermbg=235
+   hi SyntasticWarningSign ctermfg=144 ctermbg=235
+
    hi SignColumn      ctermfg=118 ctermbg=235
    hi SpecialChar     ctermfg=161               cterm=bold
    hi SpecialComment  ctermfg=245               cterm=bold
@@ -232,15 +300,28 @@ if &t_Co > 255
    hi WildMenu        ctermfg=81  ctermbg=16
 
    hi Comment         ctermfg=59
-   hi CursorColumn                ctermbg=236
    hi ColorColumn                 ctermbg=236
    hi LineNr          ctermfg=250 ctermbg=236
    hi NonText         ctermfg=59
 
    hi SpecialKey      ctermfg=59
 
-   hi SyntasticErrorSign    ctermfg=161 ctermbg=235   cterm=bold
-   hi SyntasticWarningSign  ctermfg=208 ctermbg=235   cterm=bold
+   " Highlights for vim-indent-guides
+   hi IndentGuidesOdd             ctermbg=234
+   hi IndentGuidesEven            ctermbg=235
+
+   " Highlights for vim-signify
+   hi SignifySignAdd      ctermfg=119 ctermbg=235  cterm=bold
+   hi SignifySignDelete   ctermfg=167 ctermbg=235  cterm=bold
+   hi SignifySignChange   ctermfg=227 ctermbg=235  cterm=bold
+   hi link SignifySignChangeDelete    SignifySignChange
+   hi link SignifySignDeleteFirstLine SignifySignDelete
+
+   " Highlights for csv.vim
+   hi CSVColumnHeaderOdd             ctermbg=234    cterm=bold
+   hi CSVColumnHeaderEven            ctermbg=236    cterm=bold
+   hi CSVColumnOdd                   ctermbg=234
+   hi CSVColumnEven                  ctermbg=236
 
    if exists("g:rehash256") && g:rehash256 == 1
        hi Normal       ctermfg=252 ctermbg=234
@@ -257,6 +338,12 @@ if &t_Co > 255
        hi DiffDelete      ctermfg=125 ctermbg=233
 
        hi Directory       ctermfg=154               cterm=bold
+
+       "markdown
+       hi markdownCodeDelimiter     ctermfg=154
+       hi markdownCode              ctermfg=154
+       hi markdownCodeBlock         ctermfg=154
+
        hi Error           ctermfg=222 ctermbg=233
        hi Exception       ctermfg=154               cterm=bold
        hi Float           ctermfg=141
@@ -278,8 +365,10 @@ if &t_Co > 255
        hi LineNr          ctermfg=239 ctermbg=235
        hi NonText         ctermfg=239
        hi SpecialKey      ctermfg=239
-
-       hi IndentGuidesOdd          ctermbg=234
-       hi IndentGuidesEven         ctermbg=236
    endif
 end
+
+" Must be at the end, because of ctermbg=234 bug.
+" https://groups.google.com/forum/#!msg/vim_dev/afPqwAFNdrU/nqh6tOM87QUJ
+set background=dark
+

@@ -1,5 +1,13 @@
 #!/bin/sh
 #
-# Sets OS X defaults by running $ZSH/osx/set-defaults.sh.
+# set-defaults
+#
+# `set-defaults` handles installation, updates, things like that. Run it periodically
+# to make sure you're on the latest and greatest.
+export ZSH=$HOME/.dotfiles
 
-exec $ZSH/osx/set-defaults.sh
+# Set OS X defaults
+$ZSH/osx/set-defaults.sh
+
+# Install homebrew packages
+$ZSH/homebrew/_install.sh 2>&1

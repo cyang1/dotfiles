@@ -27,22 +27,6 @@ fi
 
 bindkey -v                                                     # Use vim key bindings
 
-bindkey -M viins '^r' history-incremental-search-backward      # [Ctrl-r] - Search backward incrementally for a specified string. The string may begin with ^ to anchor the search to the beginning of the line.
-bindkey -M vicmd '^r' history-incremental-search-backward
-
-if [[ "${terminfo[kcuu1]}" != "" ]]; then
-  bindkey -M viins "${terminfo[kcuu1]}" up-line-or-search      # start typing + [Up-Arrow] - fuzzy find history forward
-  bindkey -M vicmd "${terminfo[kcuu1]}" up-line-or-search
-fi
-if [[ "${terminfo[kcud1]}" != "" ]]; then
-  bindkey -M viins "${terminfo[kcud1]}" down-line-or-search    # start typing + [Down-Arrow] - fuzzy find history backward
-  bindkey -M vicmd "${terminfo[kcud1]}" down-line-or-search
-fi
-
-bindkey -M viins '^k' up-line-or-search
-bindkey -M viins '^j' down-line-or-search
-bindkey -M vicmd 'k' up-line-or-search
-bindkey -M vicmd 'j' down-line-or-search
 bindkey -M viins '^a' vi-beginning-of-line
 bindkey -M viins '^e' vi-end-of-line
 

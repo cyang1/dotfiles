@@ -8,7 +8,7 @@ fi
 # The rest of my fun git aliases
 alias gl='git pull --prune'
 alias glog='git log --graph --abbrev-commit --stat -C --decorate --date=local'
-alias glogs="git log --graph --pretty=format:'%Cred%h%Creset %an: %s%Creset%C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
+alias glogs="git log --graph --pretty=format:'%Cred%h%Creset %Cblue%an%Creset: %s%Creset%C(yellow)%d%Creset %Cgreen(%cr)%Creset' --abbrev-commit --date=relative"
 alias gd='git diff -C --date=local'
 alias gdc='git diff --cached -C --date=local'
 alias gc='git commit'
