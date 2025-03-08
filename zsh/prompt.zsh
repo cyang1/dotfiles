@@ -111,8 +111,11 @@ time_taken='%(1V.%F{yellow}%1vs%f .)'
 
 time_str='%F{green}[%*]%f'
 
+_lineup=$'\e[1A'
+_linedown=$'\e[1B'
+
 PROMPT='
 $(prompt_context)${cur_dir}$(git_dirty)$(untracked_status)
  ${prompt_char} $(virtualenv_info)'
 PROMPT2='%F{red}   %_%f> '
-RPROMPT='${return_code}${time_taken}${time_str}'
+RPROMPT='%{${_lineup}%}${return_code}${time_taken}${time_str}%{${_linedown}%}'

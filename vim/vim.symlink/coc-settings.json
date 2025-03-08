@@ -7,5 +7,6 @@
     "json",
     "svelte"
   ],
-  "svelte.enable-ts-plugin": true
+  "svelte.enable-ts-plugin": true,
+  "suggest.noselect": true
 }

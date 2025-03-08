@@ -4,28 +4,24 @@
 # Thanks http://stackoverflow.com/questions/3349105/how-to-set-current-working-directory-to-the-directory-of-the-script
 cd "$(dirname "$(realpath $0)")"
 
-colorize_percent() {
-    local COLORS=('#[fg=red]' '#[fg=red]' '#[fg=yellow]' '#[fg=green]' '#[fg=cyan]')
+percent_color() {
+    local COLORS=('red' 'red' 'yellow' 'green' 'blue')
     local PERCENT_RE='([0-9]+)(\.[0-9]+)?\%'
 
-    # Read without stripping or splitting by whitespace.
-    local input
-    while IFS='' read -r input; do
-        if [[ "$input" =~ $PERCENT_RE ]]; then
-            local percent_val=${BASH_REMATCH[1]}
+    if [[ "$1" =~ $PERCENT_RE ]]; then
+        local percent_val=${BASH_REMATCH[1]}
 
-            case $percent_val in
-                0)      color=${COLORS[0]}  ;;
-                ?)      color=${COLORS[1]}  ;;
-                [1-2]?) color=${COLORS[1]}  ;;
-                [3-7]?) color=${COLORS[2]}  ;;
-                [8-9]?) color=${COLORS[3]}  ;;
-                100)    color=${COLORS[4]}  ;;
-            esac
-        fi
+        case $percent_val in
+            0)      color=${COLORS[0]}  ;;
+            ?)      color=${COLORS[1]}  ;;
+            [1-2]?) color=${COLORS[1]}  ;;
+            [3-7]?) color=${COLORS[2]}  ;;
+            [8-9]?) color=${COLORS[3]}  ;;
+            100)    color=${COLORS[4]}  ;;
+        esac
+    fi
 
-        echo "${color}${input}"
-    done
+    echo $color
 }
 
 EL_CAPITAN_SUFFIX=' present: true'
@@ -35,9 +31,10 @@ if command -v pmset >/dev/null 2>&1; then
     if [ -n "${batt}" ]; then
         batt[2]=${batt[2]%$EL_CAPITAN_SUFFIX}
 
-        if [ "${batt[1]}" != ' discharging' ]; then charge_icon='⚡ '; fi
+        if [ "${batt[1]}" != ' discharging' ]; then charge_icon='⚡'; fi
         [[ "${batt[2]}" =~ \(.+\) ]] || batt[2]="(${batt[2]:1})"
 
-        echo "  ${batt[0]} ${charge_icon}${batt[2]}" | colorize_percent
+        color=$(percent_color "${batt[0]}")
+        echo " #[fg=${color},bg=#49464e,nobold,nounderscore,noitalics] #[fg=#2d2a2e,bg=${color}]  ${batt[0]} ${charge_icon}${batt[2]}"
     fi
 fi

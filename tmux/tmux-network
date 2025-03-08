@@ -7,4 +7,4 @@ for interface in "${interfaces[@]}"; do
     ret="${ret}$(ifconfig $interface | grep 'inet ' | awk "{print \" $interface \" \$2}")"
 done
 
-[[ ! -z $ret ]] && echo "$ret  "
+[[ ! -z $ret ]] && echo "$ret   "

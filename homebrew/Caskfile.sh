@@ -7,7 +7,7 @@ brew install --cask google-chrome
 brew install --cask iterm2
 brew install --cask karabiner-elements
 brew install --cask spotify
-brew install --cask steelseries-exactmouse-tool
+brew install --cask homebrew/cask-drivers/steelseries-exactmouse-tool
 brew install --cask the-unarchiver
 brew install --cask transmission
 

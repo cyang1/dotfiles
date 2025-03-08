@@ -6,24 +6,17 @@ brew install coreutils
 brew install moreutils
 # Install GNU `find`, `locate`, `updatedb`, and `xargs`, `g`-prefixed
 brew install findutils
-# Install GNU `sed`, overwriting the built-in `sed`
-brew install gnu-sed --with-default-names
-
-# Install wget with IRI support
-brew install wget --with-iri
+brew install gnu-sed
+brew install wget
 
 # Install more recent versions of some OS X tools
 brew install git
 brew install grep
 brew install screen
-brew install zsh
 
 # Install other useful binaries
-brew install aria2
-brew install cmake
 brew install grc
 brew install htop-osx
-brew install hub
 brew install node
 brew install p7zip
 brew install python3
@@ -43,6 +36,5 @@ brew install ripgrep
 # Force link the new git
 brew link --overwrite git
 
-# Add the new zsh to /etc/shells and change the shell to zsh
-sudo bash -c 'grep -qF /usr/local/bin/zsh /etc/shells || echo /usr/local/bin/zsh >> /etc/shells'
-sudo bash -c 'chsh -s /usr/local/bin/zsh $SUDO_USER'
+# Change the shell to system zsh
+sudo bash -c 'chsh -s /bin/zsh $SUDO_USER'

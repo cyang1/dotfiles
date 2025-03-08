@@ -26,6 +26,7 @@ endif
 set hidden                      " Hide buffer when abandoned.
 set splitbelow splitright       " Open new split panes to right and bottom, which feels more natural.
 set list listchars=tab:»·,trail:· " Display extra whitespace and tabs.
+set spell                       " nvim 0.8 tree-sitter spell-check
 
 " Ignore certain files, esp. for Ctrl-P.
 set wildignore+=*/tmp/*,*.swp   " Useless temp files.
@@ -83,12 +84,6 @@ set nomodeline
 " Set the leader to space.
 let mapleader = " "
 
-" Setup colorscheme
-set termguicolors
-hi clear
-colorscheme molokai
-syntax on
-
 " Force new regex engine for yats.vim
 set re=0
 
@@ -108,6 +103,7 @@ if dein#load_state('~/.vim/bundle')
   call dein#add('mhinz/vim-signify')
   call dein#add('nathanaelkane/vim-indent-guides')
   call dein#add('neoclide/coc.nvim', { 'rev': 'release' })
+  call dein#add('sainnhe/sonokai')
   call dein#add('scrooloose/nerdtree')
   call dein#add('tiagofumo/vim-nerdtree-syntax-highlight')
   call dein#add('tomtom/tcomment_vim')
@@ -118,6 +114,7 @@ if dein#load_state('~/.vim/bundle')
   call dein#add('vim-airline/vim-airline-themes')
 
   " Language specific extensions.
+  call dein#add('nvim-treesitter/nvim-treesitter', {'hook_done_update': 'TSUpdate'})
   call dein#add('LaTeX-Box-Team/LaTeX-Box')
   call dein#add('sheerun/vim-polyglot')
 
@@ -132,8 +129,16 @@ if dein#check_install()
   call dein#install()
 endif
 
+" Setup colorscheme
+if has('termguicolors')
+    set termguicolors
+endif
+let g:sonokai_style = 'shusia'
+let g:sonokai_better_performance = 1
+let g:sonokai_enable_italic = 1
+colorscheme sonokai
+
 " neovim python settings
-let g:python3_host_prog = '/usr/local/bin/python3'
 let g:loaded_python_provider = 1
 
 " Treat <li> and <p> tags like the block tags they are
@@ -141,10 +146,18 @@ let g:html_indent_tags = 'li\|p'
 
 " Airline settings
 let g:airline_powerline_fonts = 1
+let g:airline_left_sep = "\ue0b8 "
+let g:airline_left_alt_sep = "\ue0b9 "
+let g:airline_right_sep = "\ue0be "
+let g:airline_right_alt_sep = "\ue0b9 "
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#buffer_nr_format = '%s│ '
-let g:airline_theme='powerlineish'
+let g:airline#extensions#tabline#buffer_nr_format = "%s\ue0bb  "
+let g:airline#extensions#tabline#left_sep = "\ue0bc "
+let g:airline#extensions#tabline#left_alt_sep = "\ue0bb "
+let g:airline#extensions#tabline#right_sep = "\ue0ba "
+let g:airline#extensions#tabline#right_alt_sep = "\ue0bb "
+let g:airline_theme='sonokai'
 
 " FZF settings
 let g:fzf_colors =
@@ -176,7 +189,8 @@ let g:NERDTreePatternMatchHighlightFullName = 1
 let g:coc_global_extensions = [
   \ 'coc-json',
   \ 'coc-tsserver',
-  \ 'coc-svelte',
+  \ 'coc-rust-analyzer',
+  \ 'coc-jedi',
   \ ]
 if isdirectory('./node_modules') && isdirectory('./node_modules/prettier')
   let g:coc_global_extensions += ['coc-prettier']
@@ -184,6 +198,34 @@ endif
 if isdirectory('./node_modules') && isdirectory('./node_modules/eslint')
   let g:coc_global_extensions += ['coc-eslint']
 endif
+
+" nvim-treesitter
+lua << EOF
+require'nvim-treesitter.configs'.setup {
+  -- A list of parser names, or "all"
+  ensure_installed = { "lua", "python", "rust", "typescript" },
+
+  -- Install parsers synchronously (only applied to `ensure_installed`)
+  sync_install = false,
+
+  -- Automatically install missing parsers when entering buffer
+  auto_install = true,
+
+  -- List of parsers to ignore installing (for "all")
+  -- ignore_install = { "javascript" },
+
+  highlight = {
+    -- `false` will disable the whole extension
+    enable = true,
+
+    -- Setting this to true will run `:h syntax` and tree-sitter at the same time.
+    -- Set this to `true` if you depend on 'syntax' being enabled (like for indentation).
+    -- Using this option may slow down your editor, and you may see some duplicate highlights.
+    -- Instead of true it can also be a list of languages
+    additional_vim_regex_highlighting = false,
+  },
+}
+EOF
 
 " vim-indent-guides settings
 let g:indent_guides_enable_on_vim_startup = 1
@@ -210,9 +252,6 @@ augroup vimrcEx
     \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
-
-  autocmd FileType markdown setlocal spell
-  autocmd FileType tex setlocal spell
 augroup END
 
 function! s:fzf_root()
@@ -228,25 +267,25 @@ nnoremap <leader>n :NERDTreeToggle<CR>
 nnoremap <leader>N :NERDTreeFind<CR>
 
 " CoC mappings
-" Use tab for trigger completion with characters ahead and navigate.
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? "\<C-n>" :
-      \ CheckBackspace() ? "\<TAB>" :
-      \ coc#refresh()
-inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
 function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
+" Use tab for trigger completion with characters ahead and navigate.
+inoremap <silent><expr> <TAB>
+      \ coc#pum#visible() ? coc#pum#next(1):
+      \ CheckBackspace() ? "\<Tab>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+
+" Make <CR> to accept selected completion item or notify coc.nvim to format
+" <C-g>u breaks current undo, please make your own choice.
+inoremap <silent><expr> <CR> coc#pum#visible() ? coc#pum#confirm()
+                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+
 " Use <c-space> to trigger completion.
 inoremap <silent><expr> <c-space> coc#refresh()
-
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
-                              \: "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
@@ -297,6 +336,6 @@ nnoremap <leader>p :set paste<CR>o<esc>"*]p:set nopaste<cr>
 " Press return to get out of highlighting
 nnoremap <silent> <CR> :nohlsearch<CR><CR>
 
-nnoremap <C-t> :exe 'Files ' . <SID>fzf_root()<CR>
+nnoremap <C-t> :exe 'GFiles ' . <SID>fzf_root()<CR>
 " :Find command
 command -nargs=+ Find Rg <args>

@@ -10,3 +10,6 @@
 [submodule "vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim"]
 	path = vim/vim.symlink/bundle/repos/github.com/Shougo/dein.vim
 	url = https://github.com/Shougo/dein.vim.git
+[submodule "zsh/zsh-autosuggestions.ignore"]
+	path = zsh/zsh-autosuggestions.ignore
+	url = https://github.com/zsh-users/zsh-autosuggestions.git

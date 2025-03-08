@@ -85,9 +85,6 @@ defaults write NSGlobalDomain WebKitDeveloperExtras -bool true
 # Use AirDrop over every interface. srsly this should be a default.
 defaults write com.apple.NetworkBrowser BrowseAllInterfaces 1
 
-# Disable the "Are you sure you want to open this application?" dialog
-defaults write com.apple.LaunchServices LSQuarantine -bool false
-
 ###############################################################################
 # Interfaces: trackpad, mouse, keyboard, bluetooth, etc.
 ###############################################################################
@@ -132,14 +129,9 @@ defaults write NSGlobalDomain NSAutomaticDashSubstitutionEnabled -bool false
 #  4: Desktop
 #  5: Start screen saver
 #  6: Disable screen saver
-#  7: Dashboard
 # 10: Put display to sleep
 # 11: Launchpad
 # 12: Notification Center
-
-# Bottom left screen corner → Dashboard
-defaults write com.apple.dock wvous-bl-corner -int 7
-defaults write com.apple.dock wvous-bl-modifier -int 0
 
 # Bottom right screen corner → Put display to sleep
 defaults write com.apple.dock wvous-br-corner -int 10
@@ -222,9 +214,6 @@ defaults write com.apple.dock mineffect -string "scale"
 
 # Minimize windows into their application’s icon
 defaults write com.apple.dock minimize-to-application -bool true
-
-# Don’t show Dashboard as a Space
-defaults write com.apple.dock dashboard-in-overlay -bool true
 
 # Don’t automatically rearrange Spaces based on most recent use
 defaults write com.apple.dock mru-spaces -bool false
